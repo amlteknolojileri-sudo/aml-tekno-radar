@@ -25,7 +25,8 @@ if (fs.existsSync(envPath)) {
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const ALICI_MAIL = process.env.ALICI_MAIL || "orhaner1907@gmail.com";
-const SENDER_EMAIL = "AML Tekno Radar <bulten@amlteknoradar.com>";
+const SENDER_EMAIL_PREF = process.env.SENDER_EMAIL || "AML Tekno Radar <bulten@aitrendleri.com>";
+const FALLBACK_SENDER = "AML Tekno Radar <onboarding@resend.dev>";
 
 /**
  * AML Raporunu Kurumsal HTML E-Posta Şablonuna Dönüştürür
@@ -144,28 +145,39 @@ async function main() {
     return;
   }
 
-  try {
-    console.log(`🚀 Resend üzerinden e-posta gönderiliyor: ${ALICI_MAIL}...`);
-    const res = await fetch("https://api.resend.com/emails", {
+  const sendEmailWithSender = async (sender) => {
+    return await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${RESEND_API_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        from: SENDER_EMAIL,
+        from: sender,
         to: [ALICI_MAIL],
         subject: `🛡️ AML Tekno Radar: ${report.date} Günlük İstihbarat & Fikirler`,
         html: htmlContent
       })
     });
+  };
+
+  try {
+    console.log(`🚀 Resend üzerinden e-posta gönderiliyor: ${ALICI_MAIL} (Gönderen: ${SENDER_EMAIL_PREF})...`);
+    let res = await sendEmailWithSender(SENDER_EMAIL_PREF);
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.warn(`⚠️ İlk gönderen ile hata (${SENDER_EMAIL_PREF}): ${errText}`);
+      console.log(`🔄 Güvenli yedek gönderici deneniyor: ${FALLBACK_SENDER}...`);
+      res = await sendEmailWithSender(FALLBACK_SENDER);
+    }
 
     if (res.ok) {
       const data = await res.json();
       console.log(`✅ Bülten başarıyla gönderildi! Email ID: ${data.id}`);
     } else {
       const err = await res.text();
-      console.warn(`⚠️ Resend HTTP ${res.status}: ${err}`);
+      console.warn(`❌ Resend HTTP ${res.status}: ${err}`);
     }
   } catch (err) {
     console.error("❌ E-posta gönderim hatası:", err.message);
