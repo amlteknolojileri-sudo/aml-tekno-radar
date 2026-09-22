@@ -235,7 +235,7 @@
   ],
   "authoritiesPulse": [
     {
-      "id": "auth-1",
+      "id": "auth-masak",
       "authority": "MASAK",
       "country": "Türkiye",
       "title": "Kripto Varlık Hizmet Sağlayıcıları (VASP) İçin Şüpheli İşlem Rehberi Güncellendi",
@@ -245,37 +245,47 @@
       "url": "https://masak.hmb.gov.tr/duyurular"
     },
     {
-      "id": "auth-2",
-      "authority": "OFAC",
-      "country": "ABD",
-      "title": "Transponder Kapatan 18 Yeni Denizcilik Paravan Şirketine Yaptırım Uygulandı",
-      "summary": "Gölge filo operasyonlarında kullanılan ve yaptırımlı petrol taşıyan tankerlerin bağlı olduğu Hong Kong ve BAE merkezli paravan şirketler SDN listesine eklendi.",
-      "impact": "Yüksek",
-      "date": "22 Eylül 2026",
-      "url": "https://ofac.treasury.gov/recent-actions"
-    },
-    {
-      "id": "auth-3",
+      "id": "auth-fatf",
       "authority": "FATF",
       "country": "Küresel Otorite",
-      "title": "Öneri 16 (Travel Rule) Kapsamında Eşik Değer ve Bilgi Paylaşımı Raporu",
+      "title": "Öneri 16 (Travel Rule) Kapsamında Eşik Değer ve Sınır Ötesi Bilgi Paylaşımı Raporu",
       "summary": "Sınır ötesi kripto ve anlık fon transferlerinde gönderen ve alıcı bilgilerinin eksik iletilmesine yönelik küresel denetim sonuçları yayınlandı.",
       "impact": "Yüksek",
       "date": "22 Eylül 2026",
       "url": "https://www.fatf-gafi.org/en/publications.html"
     },
     {
-      "id": "auth-4",
+      "id": "auth-ofac",
+      "authority": "OFAC",
+      "country": "ABD / Küresel Yaptırımlar",
+      "title": "Gölge Filo ve Denizcilik Paravan Şirketlerine Yönelik 18 Yeni Yaptırım Kararı",
+      "summary": "AIS transponder sinyalini kapatarak yaptırımlı petrol taşıyan tanker işletmecileri ve Hong Kong/BAE merkezli aracı paravan şirketler SDN listesine eklendi.",
+      "impact": "Yüksek",
+      "date": "22 Eylül 2026",
+      "url": "https://ofac.treasury.gov/recent-actions"
+    },
+    {
+      "id": "auth-fincen",
       "authority": "FinCEN",
-      "country": "ABD",
-      "title": "Yatırım Danışmanları ve Gayrimenkul Sektörüne Yönelik Nihai AML Kuralı",
-      "summary": "Gayrimenkul alımlarında nakit veya şirket arkasına gizlenen fonların gerçek faydalanıcılarının (BOI) bildirilmesi zorunlu kılındı.",
+      "country": "ABD / Finansal İstihbarat",
+      "title": "Gayrimenkul ve Yatırım Danışmanlığı Sektörüne Yönelik Nihai AML Düzenlemesi",
+      "summary": "Gayrimenkul alımlarında nakit veya paravan şirket arkasına gizlenen fonların gerçek faydalanıcılarının (BOI) bildirilmesi zorunlu kılındı.",
       "impact": "Kritik",
       "date": "22 Eylül 2026",
       "url": "https://www.fincen.gov/news-room/news"
     },
     {
-      "id": "auth-5",
+      "id": "auth-amla",
+      "authority": "AMLA",
+      "country": "Avrupa Birliği (Frankfurt)",
+      "title": "AB Tekil Kural Kitabı (Single Rulebook) ve Doğrudan Denetim Kriterleri Açıklandı",
+      "summary": "Avrupa Birliği'nin yeni süper AML otoritesi AMLA, AB genelinde en az 6 üye ülkede faaliyet gösteren 40 büyük bankayı doğrudan denetleyeceğini duyurdu.",
+      "impact": "Kritik",
+      "date": "22 Eylül 2026",
+      "url": "https://finance.ec.europa.eu/financial-markets/anti-money-laundering-and-countering-financing-terrorism_en"
+    },
+    {
+      "id": "auth-eba",
       "authority": "EBA",
       "country": "Avrupa Birliği",
       "title": "FinTek ve Neobankalarda Uzaktan Müşteri Kabulü (e-KYC) Risk Değerlendirmesi",
@@ -283,6 +293,76 @@
       "impact": "Orta",
       "date": "22 Eylül 2026",
       "url": "https://www.eba.europa.eu/news-press/news"
+    },
+    {
+      "id": "auth-fca",
+      "authority": "FCA",
+      "country": "Birleşik Krallık",
+      "title": "Bankalara Para Katırı (Money Mule) Hesaplarını Engelleme Zorunluluğu Getirildi",
+      "summary": "İngiltere'de bankaların öğrenci ve genç hesaplarındaki ani fon kaçışlarını engelleyememesi halinde dolandırıcılık zararlarını tazmin etmesini öngören yeni denetim kararı.",
+      "impact": "Yüksek",
+      "date": "22 Eylül 2026",
+      "url": "https://www.fca.org.uk/news/news-stories"
+    },
+    {
+      "id": "auth-wolfsberg",
+      "authority": "Wolfsberg",
+      "country": "Küresel / 13 Büyük Banka",
+      "title": "Muhabir Bankacılıkta Müşteri İncelemesi (CBDDQ v1.4) Prensipleri Güncellendi",
+      "summary": "Uluslararası takas ve muhabir banka hesaplarında zincirleme işlem şeffaflığı ve tüzel kişi UBO eşiği yönergeleri revize edildi.",
+      "impact": "Yüksek",
+      "date": "22 Eylül 2026",
+      "url": "https://wolfsberg-principles.com/publications"
+    },
+    {
+      "id": "auth-egmont",
+      "authority": "Egmont",
+      "country": "Küresel / 170+ FIU Ağı",
+      "title": "Çok Uluslu Aklama Ağlarında FIU'lar Arası Anlık İstihbarat Değişimi Bülteni",
+      "summary": "170 ülkenin mali istihbarat birimlerinin anlık ödeme sistemlerinde sınır ötesi fon kaçışlarını dakikalar içinde dondurabilmesi için ortak telekom kanalı devreye alındı.",
+      "impact": "Yüksek",
+      "date": "22 Eylül 2026",
+      "url": "https://egmontgroup.org/news/"
+    },
+    {
+      "id": "auth-interpol",
+      "authority": "INTERPOL",
+      "country": "Uluslararası Polis Teşkilatı",
+      "title": "I-GRIP Mekanizması ile 120 Milyon Dolarlık Çalıntı Fon Sınırda Bloke Edildi",
+      "summary": "Küresel Hızlı Müdahale Ödeme Durdurma sistemi sayesinde siber dolandırıcılık ve CEO sahtekarlığı ile kaçırılan fonlar 48 saat içinde ele geçirildi.",
+      "impact": "Kritik",
+      "date": "22 Eylül 2026",
+      "url": "https://www.interpol.int/en/Crimes/Financial-crime"
+    },
+    {
+      "id": "auth-finma",
+      "authority": "FINMA",
+      "country": "İsviçre",
+      "title": "İsviçre Özel Bankalarında Yaptırım Uyumu ve Paravan Vakıf Denetimi Raporu",
+      "summary": "Trust ve vakıf yapıları arkasına gizlenen yaptırımlı varlıkların tespitinde yetersiz kalan 3 Cenevre bankasına yönelik idari tedbir kararı.",
+      "impact": "Yüksek",
+      "date": "22 Eylül 2026",
+      "url": "https://www.finma.ch/en/news/"
+    },
+    {
+      "id": "auth-mas",
+      "authority": "MAS",
+      "country": "Singapur / Asya-Pasifik",
+      "title": "COSMIC Ortak AML Bilgi Paylaşım Platformunun Genişletilmesi Kararı",
+      "summary": "Singapur'daki ticari bankaların şüpheli paravan şirket ve sahte fatura hesaplarını birbirleriyle anlık paylaşmasını sağlayan COSMIC ağı tam kapasiteye geçti.",
+      "impact": "Yüksek",
+      "date": "22 Eylül 2026",
+      "url": "https://www.mas.gov.sg/news"
+    },
+    {
+      "id": "auth-austrac",
+      "authority": "AUSTRAC",
+      "country": "Avustralya",
+      "title": "Uluslararası Fon Transfer Talimatlarında (IFTI) Eksik Veri Cezaları",
+      "summary": "Sınır ötesi Swift ve havale işlemlerinde gönderen müşteri meslek ve adres verilerini eksik bildiren ödeme kuruluşlarına yüksek idari para cezaları uygulandı.",
+      "impact": "Orta",
+      "date": "22 Eylül 2026",
+      "url": "https://www.austrac.gov.au/news-and-media"
     }
   ],
   "dailyGlossary": [

@@ -118,7 +118,13 @@ ${(report.authoritiesPulse || []).map((a, i) => `
     );
   }, [glossarySearch]);
 
-  // Otoriteler Filtresi
+  // Otoriteler Filtresi & Dinamik Liste
+  const uniqueAuthorities = useMemo(() => {
+    const list = report.authoritiesPulse || [];
+    const authSet = new Set(list.map(a => a.authority).filter(Boolean));
+    return ['all', ...Array.from(authSet)];
+  }, [report.authoritiesPulse]);
+
   const filteredAuthorities = useMemo(() => {
     const list = report.authoritiesPulse || [];
     if (selectedAuthFilter === 'all') return list;
@@ -741,21 +747,21 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                 <div className="flex items-center gap-2">
                   <Building2 className="w-5 h-5 text-[#721c24]" />
                   <h2 className="font-bold text-sm sm:text-base text-slate-900 font-mono uppercase">
-                    Otoritelerde Durum Nasıl? (FATF, MASAK, OFAC, FinCEN, EBA)
+                    Otoritelerde Durum Nasıl? (13 Küresel Otorite: MASAK, FATF, OFAC, FinCEN, AMLA, EBA, FCA...)
                   </h2>
                 </div>
                 <span className="text-xs font-mono text-slate-500">
-                  Son 24 Saatlik Resmi Regülasyon &amp; Yaptırım Taraması
+                  Son 24 Saatlik Resmi Regülasyon, Yaptırım &amp; Denetim Taraması
                 </span>
               </div>
               <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Apify ve resmi veri kaynakları üzerinden taranan ulusal ve uluslararası mali suç otoritelerinin güncel duyuruları, SDN yaptırım kararları ve gri liste hareketleri.
+                Apify Cheerio motoru ve resmi veri kaynakları üzerinden taranan 13 ulusal ve küresel mali suç otoritesinin güncel duyuruları, SDN yaptırım kararları ve gri liste hareketleri.
               </p>
 
-              {/* Otorite Hızlı Filtre Butonları */}
+              {/* Otorite Hızlı Filtre Butonları (Dinamik 13 Otorite) */}
               <div className="flex items-center gap-1.5 pt-3 mt-3 border-t border-slate-100 flex-wrap">
                 <span className="text-[11px] font-mono font-bold text-slate-500 mr-1">FİLTRELE:</span>
-                {['all', 'MASAK', 'OFAC', 'FATF', 'FinCEN', 'EBA'].map(auth => (
+                {uniqueAuthorities.map(auth => (
                   <button
                     key={auth}
                     onClick={() => setSelectedAuthFilter(auth)}
