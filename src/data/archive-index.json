@@ -1,0 +1,20 @@
+[
+  {
+    "isoDate": "2026-09-22",
+    "date": "22 Eylül 2026",
+    "threatScore": 8.8,
+    "flashTitle": "Kripto Köprü Fonlarının FAST / SEPA Instant Sistemlerinde Smurfing ile Çıkışı"
+  },
+  {
+    "isoDate": "2026-09-21",
+    "date": "21 Eylül 2026",
+    "threatScore": 8.3,
+    "flashTitle": "Tornado Cash Benzeri Raydium Havuzlarında Otomatik Para Karıştırma Ajanları"
+  },
+  {
+    "isoDate": "2026-09-20",
+    "date": "20 Eylül 2026",
+    "threatScore": 7.9,
+    "flashTitle": "Balkan Güzergahında Dijital Lojistik Şirketleri Üzerinden Ticaret Tabanlı Aklama (TBML)"
+  }
+]
