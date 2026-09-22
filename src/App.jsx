@@ -503,7 +503,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
               </p>
             </div>
 
-            {/* TWITTER / X ÖZEL GÜNDEM (OTORİTE DIŞI UZMANLAR - EXCEL TEMASINA UYUMLU) */}
+            {/* TWITTER / X GÜNDEMİ */}
             {report.twitterPulse && (
               <div className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3.5">
                 <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-slate-200">
@@ -511,9 +511,6 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                     <span className="bg-rose-50 text-[#721c24] border border-rose-200 px-2.5 py-1 rounded font-mono font-bold text-xs uppercase flex items-center gap-1.5 shadow-2xs">
                       <Flame className="w-3.5 h-3.5 text-[#721c24]" />
                       X (Twitter) AML Gündemi
-                    </span>
-                    <span className="text-xs text-slate-500 font-mono hidden sm:inline">
-                      (Otoriteler Hariç: Bağımsız Analistler, Dedektifler &amp; Gazeteciler)
                     </span>
                   </div>
                   <span className="text-[11px] font-mono text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded font-medium">
@@ -543,7 +540,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                 {report.twitterPulse.topExpertTakeaways && (
                   <div className="bg-slate-50 border border-slate-200 rounded-sm p-3 space-y-2">
                     <span className="text-[11px] font-mono font-bold text-slate-800 uppercase block">
-                      Otorite Dışı Bağımsız Uzman &amp; Dedektif Çıkarımları:
+                      Bağımsız Uzman &amp; Dedektif Çıkarımları:
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                       {report.twitterPulse.topExpertTakeaways.map((exp, idx) => (

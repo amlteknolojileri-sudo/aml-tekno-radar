@@ -44,7 +44,7 @@ export async function analyzeAmlDataWithDualLLM({
 
 Görevin taranan ham verileri titizlikle işleyip aşağıdaki 6 ana başlıkta hatasız ve pratik çıktılar üretmektir:
 1. "amlTalks": AML Dünyasında Neler Konuşuluyor? (Reddit ve saha tartışmaları, analistlerin günlük şikayetleri, false-positive yükü, pratik çözümler)
-2. "twitterPulse": Twitter'da AML Gündemi (Twitter'da otoriteler hariç bağımsız analist, araştırmacı ve dedektiflerin ne konuştuğu, öne çıkan odak konular ve paylaşım hacimleri)
+2. "twitterPulse": Twitter'da AML Gündemi (Bağımsız analist, araştırmacı ve dedektiflerin ne konuştuğu, öne çıkan odak konular ve paylaşım hacimleri)
 3. "newDevelopmentsAndIdeas": AML Dünyasında Yeni Gelişmeler ve Fikirler? (İşlem izleme kuralları, SAR/STR otomasyonu, smurfing, kurye hesap tespiti)
 4. "cddKycInnovations": Müşteri İnceleme Süreçlerine Dair Teknolojik Gelişmeler ve Fikirler (Sentetik kimlik, deepfake liveness, UBO ve paravan şirket grafikleri)
 5. "authoritiesPulse": Otoritelerde Durum Nasıl? (FATF, MASAK, OFAC, FinCEN son 24 saat duyuruları ve yaptırımları)
@@ -60,7 +60,7 @@ ${authContext || "Otorite verisi bulunamadı."}
 === 🗣️ REDDİT TOPLULUKLARI & AML ANALİSTLERİ ===
 ${redditContext || "Reddit verisi bulunamadı."}
 
-=== 🐦 X (TWITTER) BAĞIMSIZ DEDEKTİFLER & SAHA UZMANLARI (Otorite Dışı) ===
+=== 🐦 X (TWITTER) BAĞIMSIZ DEDEKTİFLER & SAHA UZMANLARI ===
 ${twitterContext || "Twitter verisi bulunamadı."}
 
 === 📚 ARXIV AKADEMİK ARAŞTIRMALAR ===
