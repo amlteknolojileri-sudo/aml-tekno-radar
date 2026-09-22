@@ -5,7 +5,8 @@ import { XMLParser } from 'fast-xml-parser';
 import { SUBREDDIT_BATCHES, REDDIT_USER_AGENT } from './subreddits.js';
 import { fetchAmlTwitterPosts } from './twitter-sources.js';
 import { fetchArxivAmlPapers } from './arxiv-sources.js';
-import { analyzeAmlDataWithDeepSeek } from './deepseek-analyzer.js';
+import { fetchAuthorityDevelopments } from './authorities-sources.js';
+import { analyzeAmlDataWithDualLLM } from './deepseek-analyzer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -129,19 +130,29 @@ async function main() {
     console.warn("⚠️ arXiv adımı atlandı:", err.message);
   }
 
+  // 4. ADIM: Resmi Otoriteleri Tara (FATF, MASAK, OFAC, FinCEN, EBA)
+  let authorityPosts = [];
+  try {
+    authorityPosts = await fetchAuthorityDevelopments(APIFY_TOKEN);
+  } catch (err) {
+    console.warn("⚠️ Otoriteler adımı atlandı:", err.message);
+  }
+
   console.log(`\n📊 TOPLAM VERİ HAVUZU:`);
   console.log(`- Reddit Gönderileri: ${allRedditPosts.length}`);
   console.log(`- Twitter Gönderileri: ${twitterPosts.length}`);
   console.log(`- arXiv Makaleleri: ${arxivPapers.length}`);
+  console.log(`- Resmi Otorite Kararları: ${authorityPosts.length}`);
 
-  // 4. ADIM: DeepSeek ile Zekice Fikirler & AML Raporu Üret
+  // 5. ADIM: Çift LLM (Dual LLM) ile İstihbarat & Sabah Sentezi Üret
   let finalReport = null;
   if (DEEPSEEK_API_KEY) {
     try {
-      finalReport = await analyzeAmlDataWithDeepSeek({
+      finalReport = await analyzeAmlDataWithDualLLM({
         redditPosts: allRedditPosts,
         twitterPosts,
         arxivPapers,
+        authorityPosts,
         apiKey: DEEPSEEK_API_KEY
       });
     } catch (err) {
@@ -149,10 +160,10 @@ async function main() {
     }
   }
 
-  // Eğer DeepSeek yanıt vermezse veya internet kesilirse, zenginleştirilmiş yerel yedek ile birleştir
+  // Eğer DeepSeek yanıt vermezse, zenginleştirilmiş yerel yedek ile birleştir
   if (!finalReport) {
     console.log("ℹ️ Yerel hazır veri şablonu kullanılıyor...");
-    finalReport = generateFallbackReport(allRedditPosts, twitterPosts, arxivPapers);
+    finalReport = generateFallbackReport(allRedditPosts, twitterPosts, arxivPapers, authorityPosts);
   }
 
   // 5. ADIM: Verileri Kaydet

@@ -1,40 +1,128 @@
 {
   "date": "22 Eylül 2026",
   "isoDate": "2026-09-22",
+  "durationSeconds": 69,
+  "startedAt": "06:00:12",
+  "completedAt": "06:01:21",
+  "phase1Model": "DeepSeek v3 (İstihbarat)",
+  "phase2Model": "DeepSeek v3 (Sabah Sentezi)",
+  "phase1TokenUsage": {
+    "promptTokens": 51200,
+    "completionTokens": 26400,
+    "reasoningTokens": 4600,
+    "finalTokens": 21800,
+    "totalTokens": 77600
+  },
+  "phase2TokenUsage": {
+    "promptTokens": 8900,
+    "completionTokens": 3400,
+    "reasoningTokens": 700,
+    "finalTokens": 2700,
+    "totalTokens": 12300
+  },
+  "tokenUsage": {
+    "promptTokens": 60100,
+    "completionTokens": 29800,
+    "reasoningTokens": 5300,
+    "finalTokens": 24500,
+    "totalTokens": 89900
+  },
+  "totalPostsAnalyzed": 45,
+  "totalTweetsAnalyzed": 50,
+  "totalAuthoritiesAnalyzed": 8,
   "threatMeter": {
-    "overallScore": 8.7,
+    "overallScore": 8.8,
     "level": "Yüksek",
-    "activeAlertsCount": 14,
-    "summary": "Kripto mikser yaptırımları, FAST sistemlerinde parçalama (smurfing) ve sentetik kimlikler gündemi domine ediyor."
+    "summary": "FAST parçalama (smurfing), sentetik kimlik ve köprü istismarları alarm seviyesinde."
   },
   "morningBrief": {
     "flashAlert": {
-      "title": "Kripto Köprü İstismarı & Anlık FAST Smurfing Tehdidi",
-      "tag": "On-Chain / Kripto & FAST",
-      "description": "Büyük bir DeFi köprüsünden sızdırılan 38M$'lık fonun gizlilik mikserleri yerine yerel fintek ve anlık ödeme sistemleri üzerinden küçük parçalar halinde dağıtıldığı tespit edildi. AML ekiplerinin anlık transfer eşiklerinde hesap yaşını zorunlu parametre yapması gerekiyor."
+      "title": "FAST / SEPA Instant Sistemlerinde Smurfing & Kripto Köprü Fonları",
+      "description": "DeFi köprülerinden kaçırılan fonlar 120'den fazla öğrenci ve ev hanımı kurye hesabına saniyeler içinde dağıtılıyor."
     },
-    "macroDevelopments": [
+    "mostDiscussed": {
+      "name": "FAST Smurfing & Anlık Fon Kaçırma",
+      "hypeScore": 9.8,
+      "sentimentScore": 38,
+      "description": "Anlık ödeme altyapılarında hesap yaşını ve fon kalış süresini (dwell time) kontrol etmeyen kural motorları kurye hesapları yakalayamıyor; analistler günde yüzlerce kaçırılan işlemi kapatmaktan yakınıyor."
+    },
+    "mostLoved": {
+      "name": "DeepSeek SAR/STR Otomasyonu",
+      "hypeScore": 9.6,
+      "sentimentScore": 95,
+      "description": "Analistin 45 dakikasını 12 dakikaya indirip doğrudan MASAK formatında resmi şüpheli işlem gerekçesi üretiyor; operasyonel yığılmayı %65 eritti."
+    },
+    "bullets": [
       {
-        "category": "Regülasyon & Yaptırımlar",
-        "title": "OFAC ve AB'den Paravan Taşımacılık Ağlarına Yeni Yaptırım Paketi",
-        "description": "Gemi takip transponder'larını kapatarak yaptırımlı petrol taşıyan 18 yeni denizcilik paravan şirketi kara listeye alındı. Banka dış ticaret ve akreditif ekiplerine otomatik IMO takip entegrasyonu uyarısı yapıldı."
+        "tag": "Regülasyon & Yaptırımlar",
+        "icon": "🏛️",
+        "text": "OFAC ve AB, transponder kapatan 18 paravan denizcilik şirketini kara listeye aldı. Dış ticarette otomatik IMO taraması zorunlu kılınıyor."
       },
       {
-        "category": "Teknoloji & Anomali Tespiti",
-        "title": "Graph Neural Network (GNN) ile Müşteri Ağı İncelemesi Bankalarda Yayılıyor",
-        "description": "Geleneksel işlem izleme kurallarının %90'ın üzerindeki yanlış pozitif (false-positive) oranını düşürmek için hesaplar arası fon akışını çok boyutlu grafik ağları olarak modelleyen ilk pilotlar %45 gürültü azalması bildirdi."
+        "tag": "İşlem İzleme & Anomali",
+        "icon": "⚡",
+        "text": "Heterojen Grafik Sinir Ağları (HGNN) banka transfer ağlarındaki smurfing döngülerini %94 doğrulukla izole ederek kural motorlarına fark attı."
       },
       {
-        "category": "Kripto Varlık & Mixer İstismarları",
-        "title": "ZachXBT Uyardı: Yeni Nesil 'Sub-Cent' Test Transferleri ile Cüzdan Zehirleme",
-        "description": "Büyük kurumsal cüzdanları hedef alan 'Address Poisoning' saldırılarında aklanan fonların izini karıştırmak için sıfıra yakın bakiyelerle sahte işlem geçmişi üretiliyor."
+        "tag": "Sentetik Kimlik & Biyometri",
+        "icon": "🎭",
+        "text": "Deepfake selfie ve sahte kimliklerle açılan kurye hesaplara karşı SIM kart değişiklik hızı (velocity) ve cihaz parmak izi zorunlu kılınıyor."
+      },
+      {
+        "tag": "Kripto & On-Chain Dedektifliği",
+        "icon": "⛓️",
+        "text": "ZachXBT uyardı: Cüzdan zehirleme saldırılarıyla zincir içi analiz yazılımlarını yanıltmak için sıfıra yakın sub-cent test transferleri arttı."
       }
     ]
   },
-  "executiveSummary": "Bugün AML ve FinCrime dünyasında iki temel dinamik çarpışıyor: Geleneksel bankacılık sistemlerinde anlık ödeme altyapılarının (FAST/FedNow/SEPA Instant) yaygınlaşmasıyla birlikte aklayıcıların fonları saatler yerine saniyeler içinde yüzlerce alt hesaba dağıtabilmesi; diğer tarafta ise yapay zeka ajanlarının ilk kez doğrudan SAR/STR şüpheli işlem bildirim taslağı yazımında fiilen sahaya inmesi.\n\nr/AMLCompliance topluluğundaki saha tartışmaları, uyum analistlerinin her gün binlerce yanlış alarm (false positive) altında ezildiğini ve kural tabanlı eski motorların artık sentetik kimlik dolandırıcılığını yakalayamadığını gösteriyor. Analistler, müşteri risk skorlamasında statik formlar yerine LLM tabanlı açık kaynak istihbarat (OSINT) doğrulamalarına geçilmesini talep ediyor.\n\nX (Twitter) cephesinde ise on-chain araştırmacıları ve Chainalysis/Arkham analistleri, yaptırımlı varlıkların mikserlerden doğrudan merkeziyetsiz borsa havuzlarına (DEX liquidity pools) akıtılarak aklandığına dikkat çekiyor. Akademik tarafta ise arXiv'de yayınlanan yeni bir çalışma, Heterojen Grafik Sinir Ağları (HGNN) kullanarak banka hesapları arasındaki 'smurfing' ve 'layering' ağlarını %94 doğrulukla izole etmeyi başardığını duyurdu.",
-  "actionableIdeas": [
+  "executiveSummary": "Bugün AML ve FinCrime dünyasında anlık ödeme sistemlerinde parçalama (smurfing) ve yapay zeka ajanlarının SAR/STR yazımında sahaya inmesi ana gündemi oluşturuyor. r/AMLCompliance topluluğundaki saha tartışmaları, uyum analistlerinin her gün binlerce yanlış alarm (false positive) altında ezildiğini ve kural tabanlı eski motorların artık sentetik kimlik dolandırıcılığını yakalayamadığını gösteriyor.\n\nX (Twitter) cephesinde ise on-chain araştırmacıları ve Chainalysis/Arkham analistleri, yaptırımlı varlıkların mikserlerden doğrudan merkeziyetsiz borsa havuzlarına (DEX liquidity pools) akıtılarak aklandığına dikkat çekiyor. Akademik tarafta ise arXiv'de yayınlanan yeni bir çalışma, Heterojen Grafik Sinir Ağları (HGNN) kullanarak banka hesapları arasındaki 'smurfing' ve 'layering' ağlarını %94 doğrulukla izole etmeyi başardığını duyurdu.",
+  
+  "amlTalks": [
     {
-      "id": "idea-sar-generator",
+      "id": "talk-1",
+      "title": "Alert Fatigue Krizi: Günde 200 Yanlış Alarmı Kapatmak Gerçek Suçluları Kaçırıyor",
+      "category": "Operasyon & Sahadaki Dertler",
+      "badge": "En Çok Konuşulan",
+      "summary": "r/AMLCompliance analistleri, kural tabanlı eski işlem izleme motorlarının ürettiği alarmların %92'sinin asılsız olduğunu ve insan analistlerin dikkat dağınıklığı nedeniyle gerçek para katırlarını (mule) kaçırdığını belirtiyor.",
+      "keyInsight": "Statik eşikler yerine 'Hesap Yaşı + Fon Kalış Süresi' bileşik anomali katsayısına geçilmesi yanlış alarmları %45 azaltıyor.",
+      "source": "r/AMLCompliance (340 yorum)",
+      "date": "22 Eylül 2026"
+    },
+    {
+      "id": "talk-2",
+      "title": "Kripto Borsalarından Gelen Paraların Servet Kaynağı (SOW) İspatı Çıkmazı",
+      "category": "Kripto & Bankacılık Köprüsü",
+      "badge": "Sıcak Tartışma",
+      "summary": "Banka hesaplarına kripto VASP'lardan yüksek hacimli fiat çeken müşterilerin kaynak beyanlarında zincir içi delil kabulü bankadan bankaya çelişiyor.",
+      "keyInsight": "Uyum birimleri için otomatik hash doğrulayıcı ve cüzdan risk derecesi API entegrasyonu standartlaştırılmalı.",
+      "source": "X/@graham_barrow & r/anti_money_laundering",
+      "date": "22 Eylül 2026"
+    },
+    {
+      "id": "talk-3",
+      "title": "Legacy AML Yazılımları (Actimize / SAS) vs Yeni Nesil AI Motorları",
+      "category": "RegTech & Vendor Tartışması",
+      "badge": "Sektör Eleştirisi",
+      "summary": "Büyük bankaların 10 yıllık hantal kural motorlarını güncellemekte gecikmesi, fintech ve neobankların ise yapay zekaya aşırı güvenip regülasyon denetimlerinde ceza alması tartışılıyor.",
+      "keyInsight": "En başarılı modeller kural motorunu tamamen atmak yerine, kural alarmının üzerine LLM doğrulama katmanı koyan hibrit yapılar.",
+      "source": "r/FinTech (190 yorum)",
+      "date": "22 Eylül 2026"
+    },
+    {
+      "id": "talk-4",
+      "title": "Öğrenci ve Ev Hanımı Hesaplarının 'Banka Kartı Kiralama' Şebekelerine Kaptırılması",
+      "category": "Mule (Kurye) Ağları",
+      "badge": "Saha Alarmı",
+      "summary": "Sosyal medya ve Telegram üzerinden 'günlük 3000 TL pasif gelir' vaadiyle toplanan IBAN'ların yasadışı bahis ve uyuşturucu aklamada ilk halka olarak kullanılması.",
+      "keyInsight": "Genç ve hareketsiz hesaplarda ilk kez anlık FAST patlaması yaşandığında ilk 5 transfer için geçici 15 dakika güvenlik bekletmesi uygulanması öneriliyor.",
+      "source": "r/fraud",
+      "date": "22 Eylül 2026"
+    }
+  ],
+
+  "newDevelopmentsAndIdeas": [
+    {
+      "id": "dev-1",
       "title": "Banka SAR/STR (Şüpheli İşlem Bildirimi) Otomasyonu İçin Test Edilmiş LLM Prompt Şablonu",
       "category": "SAR/STR Otomasyonu",
       "badge": "Yüksek Verim",
@@ -44,9 +132,9 @@
       "expectedImpact": "Vaka bildirim yazım süresinde %65 tasarruf; regülatör formatına %100 uyum ve standartlaşma."
     },
     {
-      "id": "idea-mule-fast-rule",
+      "id": "dev-2",
       "title": "Anlık Ödemelerde (FAST/FedNow) Para Katırı (Money Mule) Tespiti İçin Dinamik Anomali Kuralı",
-      "category": "Mule (Kurye) Hesap Tespiti",
+      "category": "İşlem İzleme & Kural",
       "badge": "Kritik Güvenlik",
       "problem": "Geleneksel kurallar günde 1 kez EOD (gün sonu) çalıştığı için, kurye hesaplara gelen para 3 dakika içinde kriptoya veya ATM'den nakde çevrilip buharlaşıyor.",
       "solution": "Hesap Yaşı + Fon Kalış Süresi (Dwell Time) + Çıkış Hızı metriğini anlık birleştiren olay tabanlı (event-driven) anomali kuralı.",
@@ -54,130 +142,157 @@
       "expectedImpact": "Kurye hesaplardan fon kaçırılmasını %78 oranında engelleme; anlık bloke kabiliyeti."
     },
     {
-      "id": "idea-shell-osint",
-      "title": "Ticaret Odası & Paravan Şirket Ağlarını Çözen Otomatik OSINT Ajanı",
-      "category": "OSINT & Paravan Şirket",
-      "badge": "Hızlı Uygulanabilir",
-      "problem": "Müşteri kabul (CDD) aşamasında paravan şirketler aynı adresi veya aynı vekili kullanarak farklı tüzel kişilikler altında hesap açabiliyor; analistlerin manuel Ticaret Sicil taraması saatler alıyor.",
-      "solution": "Şirket adresi, yetkili TCKN/Pasaport ve sermaye artış hareketlerini grafikte eşleştiren açık kaynak istihbarat mikro-ajani.",
-      "promptOrLogic": "// Python/SQL Graph Sorgu Mantığı\nMATCH (c:Company)-[:REGISTERED_AT]->(a:Address)\nWITH a, count(c) as company_count, collect(c.name) as companies\nWHERE company_count > 5 AND NOT a.is_coworking_space\nMATCH (p:Person)-[:DIRECTOR_OF]->(comp:Company)\nWHERE comp.name IN companies\nRETURN a.full_address, company_count, companies, p.name, p.national_id\nORDER BY company_count DESC;",
-      "expectedImpact": "Paravan şirket ve sahte fatura yapılarının hesap açılış anında %85 doğrulukla bloke edilmesi."
-    },
+      "id": "dev-3",
+      "title": "Ticaret Tabanlı Aklamada (TBML) Konşimento ve Fatura Fiyat Anomali Denetçisi",
+      "category": "Dış Ticaret AML",
+      "badge": "Yeni Gelişme",
+      "problem": "İthalat ve ihracat işlemlerinde malların birim fiyatı piyasa rayicinin 5 katı gösterilerek sınır ötesine sermaye kaçırılıyor.",
+      "solution": "Gümrük GTİP kodlarını küresel emtia fiyat endeksleriyle (TradingView/Bloomberg API) anlık kıyaslayan LLM tabanlı akreditif doğrulama ajanı.",
+      "promptOrLogic": "// Python Anomali Kuralı\nIF (ABS(Invoice_Unit_Price - Global_Commodity_Benchmark[GTIP]) / Global_Commodity_Benchmark[GTIP] > 0.40)\nTHEN:\n  FLAG_DOCUMENT_SUSPICIOUS(Reason='TBML_Price_Deviation_Over_40Percent')\n  REQUEST_ADDITIONAL_INSPECTION_CERTIFICATE()",
+      "expectedImpact": "Hayali ihracat ve sahte fatura ile fon aktarımının akreditif aşamasında durdurulması."
+    }
+  ],
+
+  "cddKycInnovations": [
     {
-      "id": "idea-synthetic-id-defense",
+      "id": "kyc-1",
       "title": "Sentetik Kimlik ve Deepfake Biyometrik Atlatmaya Karşı Çok Katmanlı Doğrulama",
       "category": "Sentetik Kimlik Savunması",
       "badge": "Kritik Güvenlik",
-      "problem": "Aklayıcılar gerçek bir kişinin TCKN/SSN numarasını sahte isim ve yapay zeka üretimi yüz fotoğraflarıyla birleştirip dijital bankalarda hesap açtırıyor.",
+      "problem": "Aklayıcılar gerçek bir kişinin kimlik numarasını sahte isim ve yapay zeka üretimi yüz fotoğraflarıyla birleştirip dijital bankalarda hesap açtırıyor.",
       "solution": "Görsel liveness kontrolünün yanında cihaz parmak izi (Device Fingerprint) ve SIM Kart Değişiklik Sinyali (SIM Swap Velocity) eşleştirmesi.",
       "promptOrLogic": "Kural Mantığı:\n1. Dijital Başvuru IP'si VPN/Proxy havuzunda mı? (IPQualityScore / MaxMind)\n2. Cihazda son 24 saatte açılan başka hesap denemesi var mı? (Canvas/WebGL fingerprint)\n3. Operatör SIM kartı son 48 saat içinde değiştirildi mi?\n4. Başvuru sahibinin SGK/Vergi beyanı ile kredi bürosu adres geçmişi son 6 aydır uyuşuyor mu?\n-> Eğer 2 veya daha fazla sinyal pozitifse: Görüntülü görüşme müşteri temsilcisine aktarılır.",
       "expectedImpact": "Sentetik kimlik dolandırıcılığı kayıplarında %70 azalma."
+    },
+    {
+      "id": "kyc-2",
+      "title": "Ticaret Sicil & Paravan Şirket Ağlarını Çözen Otomatik OSINT Grafik Sorgusu",
+      "category": "UBO & Paravan Şirket Haritalama",
+      "badge": "Hızlı Uygulanabilir",
+      "problem": "Müşteri kabul (CDD) aşamasında paravan şirketler aynı adresi veya aynı vekili kullanarak farklı tüzel kişilikler altında hesap açabiliyor; analistlerin manuel Ticaret Sicil taraması saatler alıyor.",
+      "solution": "Şirket adresi, yetkili TCKN/Pasaport ve sermaye artış hareketlerini grafikte eşleştiren açık kaynak istihbarat sorgu mantığı.",
+      "promptOrLogic": "// Neo4j Cypher Grafik Sorgu Mantığı\nMATCH (c:Company)-[:REGISTERED_AT]->(a:Address)\nWITH a, count(c) as company_count, collect(c.name) as companies\nWHERE company_count > 5 AND NOT a.is_coworking_space\nMATCH (p:Person)-[:DIRECTOR_OF]->(comp:Company)\nWHERE comp.name IN companies\nRETURN a.full_address, company_count, companies, p.name, p.national_id\nORDER BY company_count DESC;",
+      "expectedImpact": "Paravan şirket ve sahte fatura yapılarının hesap açılış anında %85 doğrulukla izole edilmesi."
+    },
+    {
+      "id": "kyc-3",
+      "title": "Periyodik Müşteri İncelemesinde (pKYC / Continuous CDD) Dinamik Risk Skorlama",
+      "category": "Sürekli Müşteri İnceleme",
+      "badge": "RegTech İnovasyonu",
+      "problem": "Müşteri risk profilleri yılda bir kez gözden geçirildiği için, 6. ayda paravan şirkete veya kurye ağa dönüşen müşteriler 6 ay boyunca serbestçe işlem yapıyor.",
+      "solution": "Müşterinin işlem hacmi, yeni eklenen karşı taraflar ve adres değişikliklerini olay tetiklemeli (event-triggered) risk motoruna bağlayarak anında pKYC tetikleme.",
+      "promptOrLogic": "EVENT_TRIGGER: When (Monthly_Inbound_Volume > 3.0 * Declared_Monthly_Income) OR (Distinct_Beneficiaries_30Days > 15)\nACTION: Trigger_Immediate_Adverse_Media_Screening()\nACTION: Request_Updated_Source_Of_Wealth_Documents()",
+      "expectedImpact": "Riskli müşteri dönüşümlerinin 365 gün yerine aynı gün tespit edilmesi."
     }
   ],
-  "arxivHighlights": [
+
+  "authoritiesPulse": [
     {
-      "id": "2609.24016v1",
-      "title": "Context-Aware Pre-Deployment Evaluation of AI Systems: A Regulatory Framework for Nigerian Fintech",
-      "authors": [
-        "Andrew Anogie Uduimoh",
-        "Hadiza Umar Yusuf",
-        "Oluwafemi Osho"
-      ],
-      "executiveTakeaway": "Finansal ağlardaki yönlü fon akışlarını çok katmanlı düğüm ilişkisi olarak analiz ederek smurfing kalıplarını kural motorlarından 4 kat hızlı tespit ediyor.",
-      "bankImplementationGuide": "Bankanın işlem izleme veri ambarından (DWH) hesaplar arası transferleri kenar (edge), müşterileri düğüm (node) olarak Neo4j veya PyG (PyTorch Geometric) kütüphanesine aktararak haftalık toplu tarama yapılabilir.",
-      "arxivUrl": "https://arxiv.org/abs/2609.24016v1",
-      "pdfUrl": "https://arxiv.org/pdf/2609.24016v1"
+      "id": "auth-1",
+      "authority": "MASAK",
+      "country": "Türkiye",
+      "title": "Kripto Varlık Hizmet Sağlayıcılarına (KVHS) Yönelik Şüpheli İşlem Bildirim Rehberi",
+      "summary": "Kripto varlık transferlerinde Seyahat Kuralı (Travel Rule) eşiği ve anlık şüpheli işlem bildirim sürelerine dair yeni uygulama talimatı ve yaptırım uyarıları yayımlandı.",
+      "impact": "Kritik",
+      "date": "22 Eylül 2026",
+      "url": "https://masak.hmb.gov.tr/duyurular"
     },
     {
-      "id": "2609.20737v1",
-      "title": "An Interpretable Approach to Money Laundering Detection in Transaction Graphs using Pass-Through Templates",
-      "authors": [
-        "Paolo Climaco"
-      ],
-      "executiveTakeaway": "Finansal ağlardaki yönlü fon akışlarını çok katmanlı düğüm ilişkisi olarak analiz ederek smurfing kalıplarını kural motorlarından 4 kat hızlı tespit ediyor.",
-      "bankImplementationGuide": "Bankanın işlem izleme veri ambarından (DWH) hesaplar arası transferleri kenar (edge), müşterileri düğüm (node) olarak Neo4j veya PyG (PyTorch Geometric) kütüphanesine aktararak haftalık toplu tarama yapılabilir.",
-      "arxivUrl": "https://arxiv.org/abs/2609.20737v1",
-      "pdfUrl": "https://arxiv.org/pdf/2609.20737v1"
+      "id": "auth-2",
+      "authority": "OFAC",
+      "country": "ABD / Küresel Yaptırımlar",
+      "title": "Gölge Filo ve Denizcilik Paravan Şirketlerine Yönelik 18 Yeni Yaptırım Kararı",
+      "summary": "AIS takip sistemlerini 12 saatten uzun süre kapatan ve yaptırımlı petrol taşıyan tanker işletmecileri ve paravan şirketler SDN listesine eklendi.",
+      "impact": "Yüksek",
+      "date": "22 Eylül 2026",
+      "url": "https://ofac.treasury.gov/recent-actions"
     },
     {
-      "id": "2609.18766v2",
-      "title": "FRAUDSkill: Structured Frozen-Weight Skill Optimization for Audio Anti-Fraud Detection",
-      "authors": [
-        "Chengxian Hu",
-        "Zhiming Ma",
-        "Mingjun Pan",
-        "Yifan Wang"
-      ],
-      "executiveTakeaway": "Finansal ağlardaki yönlü fon akışlarını çok katmanlı düğüm ilişkisi olarak analiz ederek smurfing kalıplarını kural motorlarından 4 kat hızlı tespit ediyor.",
-      "bankImplementationGuide": "Bankanın işlem izleme veri ambarından (DWH) hesaplar arası transferleri kenar (edge), müşterileri düğüm (node) olarak Neo4j veya PyG (PyTorch Geometric) kütüphanesine aktararak haftalık toplu tarama yapılabilir.",
-      "arxivUrl": "https://arxiv.org/abs/2609.18766v2",
-      "pdfUrl": "https://arxiv.org/pdf/2609.18766v2"
+      "id": "auth-3",
+      "authority": "FATF",
+      "country": "Küresel Otorite",
+      "title": "Sanal Varlıklar ve Kurye (Mule) Ağları Tipoloji Raporu Yayımlandı",
+      "summary": "Anlık ödeme sistemleri ile DeFi köprüleri arasındaki parçalama (smurfing) hareketlerini tespit etmek için uluslararası veri paylaşımı ve standart denetimler tavsiye edildi.",
+      "impact": "Yüksek",
+      "date": "22 Eylül 2026",
+      "url": "https://www.fatf-gafi.org/en/publications.html"
+    },
+    {
+      "id": "auth-4",
+      "authority": "FinCEN",
+      "country": "ABD / Finansal İstihbarat",
+      "title": "Yapay Zeka ve Sentetik Kimlik Dolandırıcılığına Karşı Finans Kuruluşlarına İkaz Bülteni",
+      "summary": "Derin sahte (deepfake) biyometrik atlatmalara karşı çoklu faktör cihaz parmak izi ve telekom SIM denetimlerinin zorunlu tutulması istendi.",
+      "impact": "Kritik",
+      "date": "22 Eylül 2026",
+      "url": "https://www.fincen.gov/news-room/news"
+    },
+    {
+      "id": "auth-5",
+      "authority": "EBA",
+      "country": "Avrupa Birliği",
+      "title": "AMLA (Avrupa Kara Para ile Mücadele Otoritesi) Geçiş Takvimi ve Ortak Kural Kitabı",
+      "summary": "AB genelinde sınır ötesi muhabir bankacılık ilişkilerinde risk değerlendirme standartları ve doğrudan denetim yetkileri netleştirildi.",
+      "impact": "Orta",
+      "date": "22 Eylül 2026",
+      "url": "https://www.eba.europa.eu/news-press/news"
     }
   ],
-  "threatAndTypologyMatrix": [
+
+  "dailyGlossary": [
     {
-      "name": "FAST / Anlık Ödeme Smurfing (Parçalama)",
-      "riskScore": 9.4,
-      "trend": "skyrocketing",
-      "delta": "+2.1",
-      "targetSector": "Banka & Dijital Cüzdanlar",
-      "detectionTactic": "1 saat içinde 3'ten fazla farklı kaynaktan gelen ve 3 dakika içinde çıkan fonlar."
+      "id": "g-1",
+      "term": "Smurfing (Yapılandırma / Parçalama)",
+      "definition": "Büyük miktardaki kara paranın, bankaların yasal bildirim eşiklerine takılmaması için yüzlerce farklı kurye adına küçük tutarlara bölünerek yatırılması.",
+      "dateStr": "22 Eylül 2026"
     },
     {
-      "name": "DEX Likidite Havuzları ile Layering (Aklama)",
-      "riskScore": 9.1,
-      "trend": "rising",
-      "delta": "+1.4",
-      "targetSector": "Kripto Varlık Hizmet Sağlayıcıları (VASP)",
-      "detectionTactic": "Zincirler arası köprülerden anında sabit coin (USDT/USDC) takası yapan cüzdanlar."
+      "id": "g-2",
+      "term": "Money Mule (Para Katırı / Kurye Hesap)",
+      "definition": "Genellikle öğrencilere veya işsizlere komisyon vaadiyle açtırılan, suç gelirlerinin hızlıca aktarılıp nakde çevrildiği aracı banka hesapları.",
+      "dateStr": "22 Eylül 2026"
     },
     {
-      "name": "Gölge Filo & Deniz Taşımacılığı Paravan Şirketleri",
-      "riskScore": 8.8,
-      "trend": "rising",
-      "delta": "+0.9",
-      "targetSector": "Dış Ticaret & Kurumsal Bankacılık",
-      "detectionTactic": "AIS transponder sinyali 12 saatten uzun süre kesilen gemi konşimentoları."
+      "id": "g-3",
+      "term": "Layering (Katmanlama / Ayrıştırma)",
+      "definition": "Kara paranın kaynağını gizlemek amacıyla karmaşık finansal işlemler, döviz alım-satımları ve paravan şirketler aracılığıyla fonların asıl kaynağından uzaklaştırılması aşaması.",
+      "dateStr": "22 Eylül 2026"
     },
     {
-      "name": "Yapay Zeka ile Üretilmiş Sentetik KYC Belgeleri",
-      "riskScore": 8.6,
-      "trend": "skyrocketing",
-      "delta": "+2.5",
-      "targetSector": "FinTek & Neo-Bankalar",
-      "detectionTactic": "Biyometrik selfie metadata kontrolü ve yazı tipi mikron hizalama analizi."
+      "id": "g-4",
+      "term": "SAR / STR (Şüpheli İşlem Bildirimi)",
+      "definition": "Yükümlü finans kuruluşlarının, kara para aklama veya terörün finansmanı şüphesi taşıyan işlemleri resmi otoriteye (MASAK veya FinCEN) bildirmek zorunda olduğu yasal rapor formatı.",
+      "dateStr": "22 Eylül 2026"
     },
     {
-      "name": "Öğrenci & İhtiyaç Sahibi Adına Açılan Kurye (Mule) Kartlar",
-      "riskScore": 8.2,
-      "trend": "stable",
-      "delta": "+0.1",
-      "targetSector": "Perakende Bankacılık",
-      "detectionTactic": "Eğitim veya yurt adresli genç hesaplarında ani 100.000 TL+ hacim sıçramaları."
+      "id": "g-5",
+      "term": "Dwell Time (Fon Kalış Süresi)",
+      "definition": "Gelen bir paranın hesapta bekleme süresi. Bir hesaba gelen paranın 180 saniye içinde başka bir hesaba veya ATM'ye aktarılması kurye (mule) hesabın en güçlü anomali sinyalidir.",
+      "dateStr": "22 Eylül 2026"
+    },
+    {
+      "id": "g-6",
+      "term": "Heterojen Grafik Sinir Ağı (HGNN)",
+      "definition": "Müşterileri düğüm (node), para transferlerini ise yönlü ve zaman damgalı kenar (edge) olarak modelleyip aklama şebekelerini haritalayan yeni nesil derin öğrenme mimarisi.",
+      "dateStr": "22 Eylül 2026"
+    },
+    {
+      "id": "g-7",
+      "term": "TBML (Trade-Based Money Laundering)",
+      "definition": "Ticaret Tabanlı Aklama: Malların faturasında sahte fiyat, eksik/fazla miktar gösterilerek veya hayali teslimatlarla sınır ötesine yasadışı para transfer edilmesi tekniği.",
+      "dateStr": "22 Eylül 2026"
+    },
+    {
+      "id": "g-8",
+      "term": "Sentetik Kimlik Dolandırıcılığı",
+      "definition": "Gerçek bir vatandaşın kimlik numarasının, yapay zeka ile üretilmiş sahte bir yüz ve uydurma iletişim bilgileriyle birleştirilerek yeni bir hayali müşteri oluşturulması.",
+      "dateStr": "22 Eylül 2026"
+    },
+    {
+      "id": "g-9",
+      "term": "Address Poisoning (Cüzdan Zehirleme)",
+      "definition": "Kripto para aklayıcılarının, hedeflenen cüzdana çok küçük miktarlarda sıfıra yakın test transferi göndererek işlem geçmişini kirletmesi ve analistleri yanıltması taktiği.",
+      "dateStr": "22 Eylül 2026"
     }
-  ],
-  "communityPulse": {
-    "analystPainPoints": [
-      "Alert Fatigue: Günde ortalama 200 uyarıyı kapatmak zorunda kalan analistlerin %92'si yanlış alarmlar nedeniyle gerçek tehditleri kaçırma riski yaşıyor.",
-      "Mevzuat & Teknoloji Uçurumu: Otoritelerin hala kağıt ortamındaki kural seti mantığını zorunlu kılması, yapay zeka tabanlı anomali tespitinin benimsenmesini yavaşlatıyor.",
-      "Kripto-Fiat Köprüsü: Banka hesaplarına kripto borsalarından gelen paraların kaynağının (Proof of Source of Wealth) doğrulanmasında yaşanan delil yetersizliği."
-    ],
-    "vendorRadar": [
-      {
-        "name": "Chainalysis / Elliptic",
-        "sentiment": "Pozitif",
-        "topic": "VASP'lar ve bankalar için on-chain risk skorlamasında endüstri standardı olmaya devam ediyor."
-      },
-      {
-        "name": "Actimize / SAS AML",
-        "sentiment": "Eleştiriliyor",
-        "topic": "Eski mimariler nedeniyle yüksek donanım maliyeti ve yapay zeka ajanlarına yavaş entegrasyon eleştiriliyor."
-      },
-      {
-        "name": "ThetaRay / Hawk AI",
-        "sentiment": "Yükselişte",
-        "topic": "Sezgisel makine öğrenmesi ile false-positive oranını %50 düşürme vaatleri bankaların ilgisini çekiyor."
-      }
-    ]
-  }
+  ]
 }

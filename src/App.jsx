@@ -1,20 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { CATEGORY_DEFINITIONS, MOCK_TOOLS_DATA, DEFAULT_AML_GLOSSARY } from './data/mockData.js';
+import { CATEGORY_DEFINITIONS, DEFAULT_AML_GLOSSARY } from './data/mockData.js';
 import latestReportData from './data/latest-aml-report.json';
 import archiveIndexData from './data/archive-index.json';
 import { 
-  ArrowUpRight, 
-  ArrowDownRight, 
-  Minus, 
   ChevronDown, 
   ChevronUp, 
   History,
-  FileSpreadsheet,
-  Filter,
-  Info,
   Calendar,
   ExternalLink,
-  BookOpen,
   Sparkles,
   Terminal,
   Coffee,
@@ -28,18 +21,21 @@ import {
   Search,
   Mail,
   Send,
+  Building2,
   ShieldAlert,
   Flame,
-  Download,
+  MessageSquare,
+  Users,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  FileText,
+  Filter
 } from 'lucide-react';
 
 export default function App() {
-  const [timeframe, setTimeframe] = useState('daily'); // 'daily' | 'weekly' | 'monthly' | 'report' | 'ideas' | 'arxiv' | 'glossary'
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [expandedId, setExpandedId] = useState(null);
-  const [copiedBrief, setCopiedBrief] = useState(false);
+  // Tablar: 'talks' | 'developments' | 'cdd_kyc' | 'authorities' | 'glossary' | 'report'
+  const [activeTab, setActiveTab] = useState('talks');
+  const [selectedAuthFilter, setSelectedAuthFilter] = useState('all');
   const [isBriefExpanded, setIsBriefExpanded] = useState(true);
   const [copiedCmdId, setCopiedCmdId] = useState(null);
   const [isSystemInfoOpen, setIsSystemInfoOpen] = useState(false);
@@ -53,27 +49,6 @@ export default function App() {
 
   const report = latestReportData;
 
-  // Modeller / Tipolojiler Listesi
-  const toolsList = useMemo(() => {
-    return MOCK_TOOLS_DATA.daily || [];
-  }, []);
-
-  const filteredTools = useMemo(() => {
-    if (selectedCategory === 'all') return toolsList;
-    return toolsList.filter(t => t.category === selectedCategory);
-  }, [toolsList, selectedCategory]);
-
-  const selectedTool = useMemo(() => {
-    if (!expandedId) return null;
-    return toolsList.find(t => t.id === expandedId) || null;
-  }, [toolsList, expandedId]);
-
-  const avgHypeScore = useMemo(() => {
-    if (!filteredTools.length) return '0.0';
-    const sum = filteredTools.reduce((acc, t) => acc + (t.hypeScore || 0), 0);
-    return (sum / filteredTools.length).toFixed(1);
-  }, [filteredTools]);
-
   const handleCopyCmd = (id, text) => {
     navigator.clipboard.writeText(text);
     setCopiedCmdId(id);
@@ -86,14 +61,14 @@ export default function App() {
     setSubscribeStatus('loading');
     setTimeout(() => {
       setSubscribeStatus('success');
-      setSubscribeMessage('Bültene başarıyla abone oldunuz! İlk bülteniniz yarın sabah 06:00\'da iletilecektir.');
+      setSubscribeMessage('Bültene başarıyla abone oldunuz! İlk bülteniniz sabah 06:00\'da iletilecektir.');
     }, 1200);
   };
 
   const handleCopyMarkdown = () => {
     const mdText = `# 🛡️ AML TEKNO RADAR - GÜNLÜK İSTİHBARAT BÜLTENİ
 Tarih: ${report.date || '22 Eylül 2026'}
-Risk Skoru: ${report?.threatMeter?.overallScore || 8.8}/10 (${report?.threatMeter?.level || 'Yüksek'})
+Risk Skoru: ${report.threatMeter?.overallScore || 8.8}/10 (${report.threatMeter?.level || 'Yüksek'})
 
 ## 🚨 GÜNÜN FLAŞ TEHDİDİ
 ${report.morningBrief?.flashAlert?.title || ''}
@@ -102,8 +77,15 @@ ${report.morningBrief?.flashAlert?.description || ''}
 ## 📋 YÖNETİCİ BRİFİNGİ
 ${report.executiveSummary || ''}
 
-## 💡 AML EKİPLERİ İÇİN ZEKİCE FİKİRLER & REÇETELER
-${(report.actionableIdeas || []).map((idea, i) => `
+## 💬 AML DÜNYASINDA NELER KONUŞULUYOR?
+${(report.amlTalks || []).map((t, i) => `
+### #${i + 1} ${t.title} [${t.source}]
+- Özet: ${t.summary}
+- Çıkarım: ${t.keyInsight}
+`).join('\n')}
+
+## 💡 YENİ GELİŞMELER & ZEKİCE FİKİRLER
+${(report.newDevelopmentsAndIdeas || []).map((idea, i) => `
 ### #${i + 1} ${idea.title} [${idea.category}]
 - Problem: ${idea.problem}
 - Çözüm: ${idea.solution}
@@ -111,13 +93,24 @@ ${(report.actionableIdeas || []).map((idea, i) => `
 ${idea.promptOrLogic}
 - Beklenen Etki: ${idea.expectedImpact}
 `).join('\n')}
+
+## 🏛️ OTORİTELERDE DURUM NASIL?
+${(report.authoritiesPulse || []).map((a, i) => `
+- [${a.authority}] ${a.title} (${a.date}): ${a.summary}
+`).join('\n')}
 `;
     navigator.clipboard.writeText(mdText);
     setCopiedMd(true);
     setTimeout(() => setCopiedMd(false), 2500);
   };
 
-  const filteredGlossary = useMemo(() => {
+  // Günün Sözlüğü (O günkü 9 kavram)
+  const todayGlossary = useMemo(() => {
+    return report.dailyGlossary || DEFAULT_AML_GLOSSARY.slice(0, 9);
+  }, [report]);
+
+  // Geçmiş Sözlük Arşivi (Tüm kavramlar birikimli)
+  const filteredArchiveGlossary = useMemo(() => {
     if (!glossarySearch) return DEFAULT_AML_GLOSSARY;
     return DEFAULT_AML_GLOSSARY.filter(item => 
       item.term.toLowerCase().includes(glossarySearch.toLowerCase()) ||
@@ -125,31 +118,55 @@ ${idea.promptOrLogic}
     );
   }, [glossarySearch]);
 
+  // Otoriteler Filtresi
+  const filteredAuthorities = useMemo(() => {
+    const list = report.authoritiesPulse || [];
+    if (selectedAuthFilter === 'all') return list;
+    return list.filter(a => a.authority?.toLowerCase().includes(selectedAuthFilter.toLowerCase()));
+  }, [report, selectedAuthFilter]);
+
+  // Token Telemetrisi Hesabı (Çift LLM)
+  const p1 = report.phase1TokenUsage || {};
+  const p2 = report.phase2TokenUsage || {};
+  const tu = report.tokenUsage || {};
+
+  const p1PromptK = ((p1.promptTokens || 51200) / 1000).toFixed(1);
+  const p1ReasoningK = ((p1.reasoningTokens || 4600) / 1000).toFixed(1);
+  const p1FinalK = ((p1.finalTokens || 21800) / 1000).toFixed(1);
+  const p1TotalK = ((p1.totalTokens || 77600) / 1000).toFixed(1);
+
+  const p2PromptK = ((p2.promptTokens || 8900) / 1000).toFixed(1);
+  const p2ReasoningK = ((p2.reasoningTokens || 700) / 1000).toFixed(1);
+  const p2FinalK = ((p2.finalTokens || 2700) / 1000).toFixed(1);
+  const p2TotalK = ((p2.totalTokens || 12300) / 1000).toFixed(1);
+
+  const totalK = ((tu.totalTokens || 89900) / 1000).toFixed(1);
+
   return (
-    <div className="min-h-screen bg-[#f3f4f6] text-slate-800 font-sans antialiased flex flex-col selection:bg-[#b91c1c] selection:text-white">
+    <div className="min-h-screen bg-[#f3f4f6] text-slate-800 font-sans antialiased flex flex-col selection:bg-[#721c24] selection:text-white">
       
-      {/* 1. EXCEL KIRMIZI BAŞLIK ÇUBUĞU (Office Ribbon Bar - RED THEME) */}
-      <header className="bg-[#b91c1c] text-white select-none shadow-sm">
+      {/* 1. EXCEL MAT RUJ KIRMIZISI BAŞLIK ÇUBUĞU (Office Ribbon Bar - MATTE LIPSTICK RED) */}
+      <header className="bg-[#721c24] text-white select-none shadow-md">
         {/* Üst Logo, Dosya Adı ve Geçmiş Tarih Seçici */}
         <div className="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
           
           {/* MASAÜSTÜ SOL: Logo ve yanında Tarih Dropdown */}
           <div className="flex items-center gap-2.5 sm:gap-3.5">
             <div className="flex items-center gap-2.5">
-              <div className="flex items-center justify-center w-7 h-7 bg-white text-[#b91c1c] font-black rounded text-xs shadow-inner tracking-tighter">
+              <div className="flex items-center justify-center w-7 h-7 bg-white text-[#721c24] font-black rounded text-xs shadow-inner tracking-tighter">
                 AML
               </div>
               <span className="font-bold text-base tracking-wide font-mono">amlteknoradar.com</span>
             </div>
 
             {/* Geçmiş Tarih / Arşiv Seçici Dropdown */}
-            <div className="flex items-center gap-1.5 bg-[#991b1b] border border-rose-400/40 px-2 py-1 rounded text-white shadow-xs">
+            <div className="flex items-center gap-1.5 bg-[#5c0f1c] border border-rose-300/30 px-2 py-1 rounded text-white shadow-xs">
               <Calendar className="w-3.5 h-3.5 text-rose-200 flex-shrink-0" />
               <select
                 value={selectedDateId}
                 onChange={(e) => setSelectedDateId(e.target.value)}
                 className="bg-transparent text-white font-mono text-[11px] sm:text-xs font-semibold focus:outline-none cursor-pointer pr-1"
-                title="Geçmiş günlerin sıralamasını ve raporunu görüntüle"
+                title="Geçmiş günlerin raporunu görüntüle"
               >
                 <option value="latest" className="bg-slate-800 text-white font-sans text-xs">
                   {report.date || "22 Eylül 2026 (En Güncel)"}
@@ -163,107 +180,128 @@ ${idea.promptOrLogic}
             </div>
           </div>
 
-          {/* Sağ Durum: Model / Telemetri Bilgisi */}
+          {/* Sağ Durum: ÇİFT LLM (DUAL LLM) & TELEMETRİ BİLGİSİ (Birebir Eski Proje Düzeni) */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 text-xs font-mono text-rose-100 flex-wrap">
 
             {/* 📱 MOBİL: "Sistem Bilgileri" Butonu */}
             <button
               type="button"
               onClick={() => setIsSystemInfoOpen(true)}
-              className="lg:hidden flex items-center gap-1.5 bg-[#7f1d1d] hover:bg-[#450a0a] active:scale-95 border border-rose-400/40 px-2.5 py-1.5 rounded text-xs font-mono font-bold text-white shadow-xs transition cursor-pointer"
+              className="lg:hidden flex items-center gap-1.5 bg-[#5c0f1c] hover:bg-[#4a0b16] active:scale-95 border border-rose-300/30 px-2.5 py-1.5 rounded text-xs font-mono font-bold text-white shadow-xs transition cursor-pointer"
             >
               <Cpu className="w-3.5 h-3.5 text-rose-200 shrink-0" />
-              <span>Sistem Bilgileri</span>
+              <span>Sistem Telemetrisi</span>
             </button>
 
-            {/* ⚡ MASAÜSTÜ: LLM & Veri Telemetrisi */}
+            {/* ⚡ MASAÜSTÜ: 1. LLM & 2. LLM Telemetrisi (Birebir Eski Kusursuz Hali) */}
             <div className="hidden lg:flex items-center gap-2">
-              {/* Çalışma Süresi */}
-              <div className="flex flex-col justify-between py-1 px-2.5 bg-[#991b1b] border border-rose-400/30 rounded text-[11px] font-mono shadow-xs h-[50px]">
+              
+              {/* Süre Kutusu */}
+              <div className="flex flex-col justify-between py-1 px-2.5 bg-[#5c0f1c] border border-rose-300/25 rounded text-[11px] font-mono shadow-xs h-[50px]">
                 <div className="flex items-center gap-1 text-amber-300 font-semibold whitespace-nowrap leading-none pt-0.5">
                   <Clock className="w-3 h-3 text-amber-300 flex-shrink-0" />
                   <span>{report.durationSeconds || 69}s</span>
                 </div>
-                <div className="flex items-center gap-1 text-rose-200 font-medium whitespace-nowrap border-t border-rose-400/20 pt-1 leading-none text-[10.5px]">
-                  <span>06:00 TSİ (Otomatik)</span>
+                <div className="flex items-center gap-1 text-rose-200 font-medium whitespace-nowrap border-t border-rose-300/20 pt-1 leading-none text-[10.5px]">
+                  <span>{report.startedAt ? `${report.startedAt.slice(0, 5)} ➔ ${report.completedAt ? report.completedAt.slice(0, 5) : '06:01'} TSİ` : '06:00 TSİ'}</span>
                 </div>
               </div>
 
-              {/* LLM Modeli */}
-              <div className="flex flex-col justify-between py-1 px-2.5 bg-[#991b1b] border border-rose-400/30 rounded text-[11px] font-mono shadow-xs h-[50px]">
-                <div className="flex items-center gap-1 text-cyan-300 font-semibold whitespace-nowrap leading-none pt-0.5">
-                  <Zap className="w-3 h-3 text-cyan-300 flex-shrink-0" />
-                  <span>DeepSeek v3</span>
-                </div>
-                <div className="flex items-center gap-1 text-white font-bold whitespace-nowrap border-t border-rose-400/20 pt-1 leading-none text-[10.5px]">
-                  <span>Reasoning Motoru</span>
-                </div>
-              </div>
-
-              {/* Token Telemetrisi */}
-              <div className="flex flex-col justify-center items-center bg-[#7f1d1d] border border-rose-400/40 px-2.5 py-1 rounded font-mono shadow-xs text-center h-[50px]">
-                <span className="text-yellow-300 font-bold text-[9.5px] uppercase">Bileşik Toplam</span>
-                <span className="text-xs font-black text-white">
-                  {((report.tokenUsage?.totalTokens || 84200) / 1000).toFixed(1)}k token
+              {/* Çift LLM Ayrı Telemetri Kutusu (2 Satır Hizalı) */}
+              <div className="grid grid-cols-[auto_auto_auto_auto_auto_auto_auto_auto] items-center gap-x-2 gap-y-0.5 bg-[#5c0f1c] border border-rose-300/25 px-3 py-1 rounded text-[11px] font-mono shadow-xs h-[50px]">
+                {/* SATIR 1: 1. LLM */}
+                <span className="font-bold text-amber-300 flex items-center gap-1 whitespace-nowrap">
+                  <Zap className="w-3 h-3 text-amber-300 flex-shrink-0" />
+                  1. LLM:
                 </span>
+                <div>
+                  <span className="bg-[#4a0b16] text-white px-1.5 py-0.2 rounded font-semibold text-[10.5px] border border-rose-300/20 whitespace-nowrap text-center inline-block">
+                    DeepSeek v3 (İstihbarat)
+                  </span>
+                </div>
+                <span className="text-rose-300/40">|</span>
+                <span className="whitespace-nowrap">Girdi: <strong className="text-rose-200 font-bold">{p1PromptK}k</strong></span>
+                <span className="text-rose-300/40">|</span>
+                <span className="whitespace-nowrap">Düşünce: <strong className="text-purple-300 font-bold">{p1ReasoningK}k</strong></span>
+                <span className="text-rose-300/40">|</span>
+                <span className="whitespace-nowrap">Nihai: <strong className="text-yellow-300 font-bold">{p1FinalK}k</strong></span>
+
+                {/* SATIR 2: 2. LLM */}
+                <span className="font-bold text-cyan-300 flex items-center gap-1 whitespace-nowrap border-t border-rose-300/20 pt-1">
+                  <Zap className="w-3 h-3 text-cyan-300 flex-shrink-0" />
+                  2. LLM:
+                </span>
+                <div className="border-t border-rose-300/20 pt-1">
+                  <span className="bg-[#4a0b16] text-white px-1.5 py-0.2 rounded font-semibold text-[10.5px] border border-rose-300/20 whitespace-nowrap text-center inline-block">
+                    DeepSeek v3 (Sabah Sentezi)
+                  </span>
+                </div>
+                <span className="text-rose-300/40 border-t border-rose-300/20 pt-1">|</span>
+                <span className="whitespace-nowrap border-t border-rose-300/20 pt-1">Girdi: <strong className="text-rose-200 font-bold">{p2PromptK}k</strong></span>
+                <span className="text-rose-300/40 border-t border-rose-300/20 pt-1">|</span>
+                <span className="whitespace-nowrap border-t border-rose-300/20 pt-1">Düşünce: <strong className="text-purple-300 font-bold">{p2ReasoningK}k</strong></span>
+                <span className="text-rose-300/40 border-t border-rose-300/20 pt-1">|</span>
+                <span className="whitespace-nowrap border-t border-rose-300/20 pt-1">Nihai: <strong className="text-yellow-300 font-bold">{p2FinalK}k</strong></span>
               </div>
 
-              {/* Taranan Kaynaklar: Reddit & X */}
-              <div className="flex flex-col justify-between py-1 px-2.5 bg-[#991b1b] border border-rose-400/30 rounded text-[11px] font-mono shadow-xs h-[50px]">
-                <div className="grid grid-cols-[14px_44px_6px_auto] items-center gap-x-1 leading-none pt-0.5">
+              {/* Bileşik Toplam Rozeti */}
+              <div 
+                className="hidden xl:flex flex-col justify-center items-center bg-[#4a0b16] border border-rose-300/35 px-2.5 py-1 rounded font-mono shadow-xs text-center h-[50px]"
+                title="1. LLM + 2. LLM Toplam Token"
+              >
+                <span className="text-yellow-300 font-bold text-[9.5px] uppercase">Bileşik Toplam</span>
+                <span className="text-xs font-black text-white">{totalK}k token</span>
+              </div>
+
+              {/* Veri Kaynağı Hacim Rozetleri (Reddit, X, Otoriteler) */}
+              <div className="flex flex-col justify-between py-1 px-2.5 bg-[#5c0f1c] border border-rose-300/25 rounded text-[11px] font-mono shadow-xs h-[50px]">
+                <div className="grid grid-cols-[14px_48px_6px_auto] items-center gap-x-1 leading-none pt-0.5">
                   <span className="w-2 h-2 rounded-full bg-orange-400 shrink-0"></span>
-                  <span className="text-rose-100 font-semibold">Reddit</span>
-                  <span className="text-rose-300 font-bold">:</span>
+                  <span className="text-rose-100 font-semibold">Reddit:</span>
+                  <span></span>
                   <strong className="text-white font-bold">{report.totalPostsAnalyzed || 45}</strong>
                 </div>
-                <div className="grid grid-cols-[14px_44px_6px_auto] items-center gap-x-1 border-t border-rose-400/20 pt-1 leading-none text-[10.5px]">
+                <div className="grid grid-cols-[14px_48px_6px_auto] items-center gap-x-1 border-t border-rose-300/20 pt-1 leading-none text-[10.5px]">
                   <span className="w-3 h-3 bg-black text-white text-[8px] font-black flex items-center justify-center rounded-xs shrink-0">𝕏</span>
-                  <span className="text-rose-200 font-semibold">Twitter</span>
-                  <span className="text-rose-300 font-bold">:</span>
-                  <strong className="text-white font-bold">{report.totalTweetsAnalyzed || 50}</strong>
+                  <span className="text-rose-200 font-semibold">X / Otor:</span>
+                  <span></span>
+                  <strong className="text-white font-bold">{(report.totalTweetsAnalyzed || 50) + (report.totalAuthoritiesAnalyzed || 8)}</strong>
                 </div>
               </div>
+
             </div>
 
           </div>
         </div>
 
-        {/* 2. ZAMAN SEÇİCİ SEKMELER & BÜLTEN BUTONU (KIRMIZI ŞERİT BUTONLAR) */}
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 border-t border-[#991b1b] pt-2 pb-1.5">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-1.5 w-full">
+        {/* 2. ANA SEKMELER ÇUBUĞU (KULLANICININ İSTEDİĞİ 5 ANA BAŞLIK + BÜLTEN) */}
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 border-t border-[#5c0f1c] pt-2 pb-1.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 w-full">
             {[
-              { id: 'daily', label: '📊 24 Saatlik Sıralama' },
-              { id: 'weekly', label: '📈 1 Haftalık Trend' },
-              { id: 'monthly', label: '🪐 1 Aylık Makro' },
-              { id: 'report', label: '📋 Danışman Bülteni' },
-              { id: 'ideas', label: '💡 Zekice Fikirler' },
-              { id: 'glossary', label: '📖 Günün Sözlüğü' }
+              { id: 'talks', label: '💬 AML Dünyasında Konuşulanlar' },
+              { id: 'developments', label: '💡 Yeni Gelişmeler & Fikirler' },
+              { id: 'cdd_kyc', label: '🔍 Müşteri İnceleme (CDD / KYC)' },
+              { id: 'authorities', label: '🏛️ Otoritelerde Durum Nasıl?' },
+              { id: 'glossary', label: '📖 Günün AML Sözlüğü' },
+              { id: 'report', label: '📋 Danışman Bülteni' }
             ].map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setTimeframe(tab.id)}
-                className={`h-9 flex items-center justify-center transition font-mono text-[11px] sm:text-xs font-bold rounded shadow-xs text-center cursor-pointer ${
-                  timeframe === tab.id
-                    ? 'bg-white text-[#b91c1c] shadow-xs'
-                    : 'text-rose-100 bg-[#991b1b] hover:bg-[#7f1d1d]'
+                onClick={() => setActiveTab(tab.id)}
+                className={`h-9 flex items-center justify-center transition font-mono text-[11px] sm:text-xs font-bold rounded shadow-xs text-center cursor-pointer px-2 ${
+                  activeTab === tab.id
+                    ? 'bg-white text-[#721c24] shadow-xs'
+                    : 'text-rose-100 bg-[#5c0f1c] hover:bg-[#4a0b16]'
                 }`}
               >
                 {tab.label}
               </button>
             ))}
-            <button
-              type="button"
-              onClick={() => setIsNewsletterModalOpen(true)}
-              className="h-9 flex items-center justify-center gap-1.5 transition font-mono text-[11px] sm:text-xs font-bold rounded shadow-xs text-center text-rose-100 bg-[#7f1d1d] hover:bg-[#450a0a] hover:text-white cursor-pointer"
-            >
-              <Mail className="w-3.5 h-3.5 text-rose-200" />
-              <span>Bültene Abone Ol</span>
-            </button>
           </div>
         </div>
       </header>
 
-      {/* 📱 MOBİL SİSTEM BİLGİLERİ MODALI */}
+      {/* 📱 SİSTEM BİLGİLERİ VE TELEMETRİ MODALI */}
       {isSystemInfoOpen && (
         <div 
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-150"
@@ -273,10 +311,10 @@ ${idea.promptOrLogic}
             className="bg-white border border-slate-300 rounded-lg shadow-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto font-mono text-xs flex flex-col text-slate-800"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-[#b91c1c] text-white px-4 py-3 flex items-center justify-between">
+            <div className="bg-[#721c24] text-white px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-rose-200" />
-                <h3 className="font-bold text-sm font-mono">AML Tekno Radar Telemetrisi</h3>
+                <h3 className="font-bold text-sm font-mono">Çift LLM ve Veri Telemetrisi</h3>
               </div>
               <button
                 type="button"
@@ -288,19 +326,23 @@ ${idea.promptOrLogic}
             </div>
             <div className="p-4 space-y-3">
               <div className="bg-rose-50 border border-rose-200 rounded p-3 space-y-1">
-                <span className="text-[11px] font-bold text-rose-950 block">Aktif Yapay Zeka Motoru:</span>
-                <p className="text-slate-800">DeepSeek v3 (Akıl Yürütme &amp; Strateji)</p>
+                <span className="text-[11px] font-bold text-rose-950 block">1. LLM (İstihbarat &amp; Çıkarım):</span>
+                <p className="text-slate-800">DeepSeek v3 • Toplam: {p1TotalK}k token (Girdi: {p1PromptK}k, Düşünce: {p1ReasoningK}k)</p>
+              </div>
+              <div className="bg-cyan-50 border border-cyan-200 rounded p-3 space-y-1">
+                <span className="text-[11px] font-bold text-cyan-950 block">2. LLM (Sabah Sentezi &amp; Brifing):</span>
+                <p className="text-slate-800">DeepSeek v3 • Toplam: {p2TotalK}k token (Girdi: {p2PromptK}k, Düşünce: {p2ReasoningK}k)</p>
               </div>
               <div className="bg-slate-50 border border-slate-200 rounded p-3 space-y-1">
                 <span className="text-[11px] font-bold text-slate-800 block">Taranan Veri Havuzu:</span>
-                <p className="text-slate-700">50+ Seçkin AML Subreddit'i + 50 X Otoritesi + Açık arXiv API</p>
+                <p className="text-slate-700">45+ Reddit Gönderisi, 50 X (Twitter) Tweeti, 8 Resmi Otorite Kararı (FATF, MASAK, OFAC, FinCEN, EBA)</p>
               </div>
             </div>
             <div className="bg-slate-50 px-4 py-2.5 border-t border-slate-200 flex items-center justify-end rounded-b-lg">
               <button
                 type="button"
                 onClick={() => setIsSystemInfoOpen(false)}
-                className="px-4 py-1.5 bg-[#b91c1c] hover:bg-[#991b1b] text-white rounded font-bold text-xs transition cursor-pointer"
+                className="px-4 py-1.5 bg-[#721c24] hover:bg-[#5c0f1c] text-white rounded font-bold text-xs transition cursor-pointer"
               >
                 Kapat
               </button>
@@ -309,102 +351,23 @@ ${idea.promptOrLogic}
         </div>
       )}
 
-      {/* 📬 BÜLTEN ABONELİK MODALI */}
-      {isNewsletterModalOpen && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150"
-          onClick={() => setIsNewsletterModalOpen(false)}
-        >
-          <div 
-            className="bg-white border border-slate-300 rounded-lg shadow-2xl max-w-md w-full overflow-hidden text-slate-800"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="bg-[#b91c1c] text-white px-4 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center justify-center w-6 h-6 bg-white text-[#b91c1c] font-black rounded text-[11px] shadow-xs">
-                  AML
-                </div>
-                <h3 className="font-bold text-sm font-mono tracking-tight">Günlük AML &amp; RegTech Bülteni</h3>
-              </div>
-              <button 
-                type="button"
-                onClick={() => setIsNewsletterModalOpen(false)}
-                className="text-rose-200 hover:text-white p-1 rounded hover:bg-[#991b1b] transition cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="p-5 space-y-4">
-              <p className="text-xs sm:text-sm text-slate-600 font-mono leading-relaxed">
-                Her sabah saat 06:00'da son 24 saatin aklama vakaları, SAR/STR promptları ve RegTech analizleri mailinize gelsin.
-              </p>
-
-              {subscribeStatus === 'success' ? (
-                <div className="bg-emerald-50 border border-emerald-300 rounded p-4 text-center space-y-2">
-                  <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-xs">
-                    <Check className="w-5 h-5" />
-                  </div>
-                  <div className="font-bold text-emerald-950 text-xs font-mono">
-                    {subscribeMessage}
-                  </div>
-                </div>
-              ) : (
-                <form onSubmit={handleSubscribe} className="space-y-3">
-                  <div>
-                    <label className="block text-[11px] font-mono font-bold text-slate-700 uppercase mb-1">
-                      E-Posta Adresiniz:
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={newsletterEmail}
-                      onChange={(e) => setNewsletterEmail(e.target.value)}
-                      placeholder="orhaner1907@gmail.com"
-                      className="w-full bg-[#f8fafc] border border-slate-300 text-slate-900 placeholder-slate-400 px-3 py-2 rounded text-xs font-mono focus:outline-none focus:border-[#b91c1c] focus:ring-1 focus:ring-[#b91c1c] transition"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={subscribeStatus === 'loading'}
-                    className="w-full bg-[#b91c1c] hover:bg-[#991b1b] active:scale-[0.98] text-white font-mono font-bold text-xs py-2.5 rounded shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                    <span>{subscribeStatus === 'loading' ? 'Kaydediliyor...' : 'Abone Ol →'}</span>
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 3. EXCEL FORMÜL VE AD ÇUBUĞU (Formula Bar - RED ACCENT) */}
+      {/* 3. EXCEL FORMÜL VE AD ÇUBUĞU (Formula Bar - TOK RUJ RENGİ) */}
       <div className="bg-white border-b border-[#d1d5db] py-1.5 px-4 shadow-xs">
         <div className="max-w-7xl mx-auto flex items-center gap-2 text-xs font-mono">
-          {/* Ad Kutusu (Hücre Koordinatı) */}
           <div className="w-14 sm:w-16 bg-[#f9fafb] border border-[#d1d5db] px-2 py-1 text-center font-bold text-slate-700 select-none">
-            {expandedId ? `B${filteredTools.findIndex(t => t.id === expandedId) + 2}` : timeframe === 'glossary' ? 'G1' : timeframe === 'report' ? 'R1' : 'A1'}
+            {activeTab === 'glossary' ? 'G1' : activeTab === 'report' ? 'R1' : activeTab === 'authorities' ? 'O1' : 'A1'}
           </div>
-
-          {/* fx İkonu */}
           <div className="flex items-center justify-center font-bold italic text-slate-500 px-1 border-r border-[#e5e7eb] pr-2">
             fx
           </div>
-
-          {/* Formül Satırı */}
           <div className="flex-1 flex items-center bg-white border border-[#d1d5db] px-3 py-1 text-slate-700 truncate">
-            <span className="text-[#b91c1c] font-bold mr-1.5">
-              {timeframe === 'glossary' ? '=GÜNÜN_SÖZLÜĞÜ(' : timeframe === 'ideas' ? '=ZEKİCE_FİKİRLER(' : '=AML.RİSK_DEĞERLENDİR('}
+            <span className="text-[#721c24] font-bold mr-1.5">
+              =AML.{activeTab.toUpperCase()}
             </span>
             <span className="text-blue-600 font-semibold truncate">
-              {timeframe === 'glossary' 
-                ? `"AML_KAVRAMLAR_VE_TİPOLOJİ_SÖZLÜĞÜ"` 
-                : selectedTool 
-                  ? `"${selectedTool.name}", KATEGORİ="${selectedTool.category}", RİSK=${selectedTool.hypeScore}/10` 
-                  : '"TÜM_AML_TİPOLOJİLERİ"'}
+              ("{report.date || '22 Eylül 2026'}", KÜRESEL_RİSK="{report.threatMeter?.overallScore || 8.8}/10", OTORİTELER="FATF,MASAK,OFAC")
             </span>
-            <span className="text-[#b91c1c] font-bold">)</span>
+            <span className="text-[#721c24] font-bold">)</span>
           </div>
         </div>
       </div>
@@ -412,20 +375,20 @@ ${idea.promptOrLogic}
       {/* 4. KATEGORİ VE ÇALIŞMA ALANI */}
       <main className="max-w-7xl mx-auto px-2 sm:px-4 py-4 w-full flex-1 space-y-4">
         
-        {/* ☕ 30 SANİYELİK SABAH İSTİHBARATI (Sadece Günlük Görünümde) */}
-        {timeframe === 'daily' && report.morningBrief && (
+        {/* ☕ 30 SANİYELİK SABAH İSTİHBARATI: DÜNYADA BUGÜN */}
+        {report.morningBrief && (
           <section className="bg-white border border-[#cbd5e1] rounded-sm p-3.5 sm:p-4 shadow-xs space-y-3">
             <div className="flex items-center justify-between gap-2 pb-2 border-b border-[#f1f5f9]">
               <div className="flex items-center gap-2">
-                <span className="w-6 h-6 rounded bg-[#b91c1c] text-white flex items-center justify-center font-bold shadow-2xs">
+                <span className="w-6 h-6 rounded bg-[#721c24] text-white flex items-center justify-center font-bold shadow-2xs">
                   <Coffee className="w-3.5 h-3.5" />
                 </span>
                 <div>
                   <h2 className="text-xs sm:text-sm font-bold text-slate-900 font-mono uppercase tracking-tight">
-                    30 Saniyelik Sabah İstihbaratı: Finansal Suçlar Dünyasında Bugün
+                    30 Saniyelik Sabah İstihbaratı: Finansal Suçlar &amp; RegTech Dünyasında Bugün
                   </h2>
                   <p className="text-[11px] text-slate-500 font-sans hidden sm:block">
-                    Mali suçlar, yaptırımlar ve yapay zeka gündemini 30 saniyede yakalayın.
+                    Mali suçlar, regülasyon uyarıları ve yapay zeka gündemini 30 saniyede yakalayın.
                   </p>
                 </div>
               </div>
@@ -446,71 +409,66 @@ ${idea.promptOrLogic}
                 {/* İkili Flaş & Savunma Kartı */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch">
                   {/* Sol Kart: 🔥 En Kritik Tehdit */}
-                  <div className="bg-rose-50/80 border border-rose-300/90 rounded p-3 shadow-2xs flex flex-col justify-between gap-2.5 h-full">
+                  <div className="bg-rose-50/80 border border-rose-300/80 rounded p-3 shadow-2xs flex flex-col justify-between gap-2.5 h-full">
                     <div>
                       <div className="flex items-center justify-between gap-2 flex-nowrap pb-1.5 border-b border-rose-200/70 min-w-0">
                         <div className="flex items-center gap-1.5 min-w-0">
                           <span className="text-sm shrink-0">🚨</span>
                           <span className="text-[11px] font-mono font-bold text-rose-950 uppercase tracking-tight shrink-0">
-                            Günün Flaş Tehdidi:
+                            Günün En Sıcak Tehdidi:
                           </span>
                           <span className="font-mono text-xs sm:text-sm font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded border border-rose-300 truncate min-w-0">
-                            FAST Smurfing &amp; Kripto Köprüler
+                            {report.morningBrief.mostDiscussed?.name || "FAST Smurfing"}
                           </span>
                         </div>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-600 text-white font-black shadow-2xs shrink-0 whitespace-nowrap">
-                          RİSK: 9.8/10
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#721c24] text-white font-black shadow-2xs shrink-0 whitespace-nowrap">
+                          RİSK: {report.morningBrief.mostDiscussed?.hypeScore || 9.8}/10
                         </span>
                       </div>
                       <p className="text-xs text-rose-900 mt-2 leading-relaxed">
-                        {report.morningBrief?.flashAlert?.description || 'DeFi köprülerinden kaçırılan fonlar anlık ödeme sistemlerinde küçük parçalar halinde aklanıyor.'}
+                        {report.morningBrief.mostDiscussed?.description}
                       </p>
                     </div>
                     <div className="text-[10px] font-mono text-rose-800/80 pt-1.5 flex items-center justify-between border-t border-rose-200/50">
                       <span>Etki Alanı: Perakende Bankacılık &amp; VASP</span>
-                      <span>Öncelik Seviyesi: Kritik</span>
+                      <span>Öncelik: Kritik</span>
                     </div>
                   </div>
 
                   {/* Sağ Kart: ⭐ En Etkili Savunma Reçetesi */}
-                  <div className="bg-amber-50/80 border border-amber-300/90 rounded p-3 shadow-2xs flex flex-col justify-between gap-2.5 h-full">
+                  <div className="bg-amber-50/80 border border-amber-300/80 rounded p-3 shadow-2xs flex flex-col justify-between gap-2.5 h-full">
                     <div>
                       <div className="flex items-center justify-between gap-2 flex-nowrap pb-1.5 border-b border-amber-200/70 min-w-0">
                         <div className="flex items-center gap-1.5 min-w-0">
                           <span className="text-sm shrink-0">⭐</span>
                           <span className="text-[11px] font-mono font-bold text-amber-950 uppercase tracking-tight shrink-0">
-                            Öne Çıkan Savunma:
+                            Öne Çıkan Savunma &amp; Çözüm:
                           </span>
                           <span className="font-mono text-xs sm:text-sm font-black text-amber-900 bg-amber-100/90 px-2 py-0.5 rounded border border-amber-300 truncate min-w-0">
-                            DeepSeek SAR/STR Otomasyonu
+                            {report.morningBrief.mostLoved?.name || "DeepSeek SAR Otomasyonu"}
                           </span>
                         </div>
                         <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-600 text-white font-black shadow-2xs shrink-0 whitespace-nowrap">
-                          VERİM: 9.6/10
+                          VERİM: {report.morningBrief.mostLoved?.hypeScore || 9.6}/10
                         </span>
                       </div>
                       <p className="text-xs text-amber-900 mt-2 leading-relaxed">
-                        Analistlerin resmi şüpheli işlem gerekçesini yazarken harcadığı 45 dakikalık süreyi 12 dakikaya indirip MASAK ve FinCEN formatına tam uyum sağlıyor.
+                        {report.morningBrief.mostLoved?.description}
                       </p>
                     </div>
                     <div className="text-[10px] font-mono text-amber-800/80 pt-1.5 flex items-center justify-between border-t border-amber-200/50">
-                      <span>Kullanım: Banka Uyum Birimleri</span>
+                      <span>Uygulama: Banka Uyum Masası</span>
                       <span>Zaman Tasarrufu: %65</span>
                     </div>
                   </div>
                 </div>
 
-                {/* 4 Kare Makro Kırılma */}
+                {/* 4 Kare Makro İstihbarat Subgrid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 items-stretch subgrid-row-morning">
-                  {[
-                    { tag: "Yaptırımlar & OFAC", icon: "🏛️", text: "OFAC ve AB, transponder kapatan 18 paravan denizcilik şirketini kara listeye aldı. Dış ticaret bankacılığına otomatik IMO tarama uyarısı yapıldı." },
-                    { tag: "Grafik AI & GNN", icon: "🕸️", text: "Heterojen Grafik Sinir Ağları (HGNN) banka transfer ağlarındaki smurfing döngülerini %94 doğrulukla izole ederek kural motorlarına fark attı." },
-                    { tag: "Sentetik Kimlik", icon: "🎭", text: "Deepfake selfie ve sahte kimliklerle açılan kurye hesaplara karşı SIM kart değişiklik hızı (velocity) ve cihaz parmak izi zorunlu kılınıyor." },
-                    { tag: "Kripto & Mixer", icon: "⛓️", text: "ZachXBT uyardı: Cüzdan zehirleme saldırılarıyla zincir içi analiz yazılımlarını yanıltmak için sıfıra yakın sub-cent test transferleri arttı." }
-                  ].map((bullet, bIdx) => (
+                  {(report.morningBrief.bullets || []).map((bullet, bIdx) => (
                     <div 
                       key={bIdx}
-                      className="p-3 bg-[#f8fafc] border border-[#cbd5e1] rounded-sm hover:border-[#b91c1c] transition shadow-2xs flex flex-col justify-between h-full subgrid-card-morning group"
+                      className="p-3 bg-[#f8fafc] border border-[#cbd5e1] rounded-sm hover:border-[#721c24] transition shadow-2xs flex flex-col justify-between h-full subgrid-card-morning group"
                     >
                       <div className="flex items-center gap-2 pb-2 border-b border-[#e2e8f0] w-full">
                         <span className="text-base shrink-0 select-none">{bullet.icon}</span>
@@ -531,89 +489,83 @@ ${idea.promptOrLogic}
           </section>
         )}
 
-        {/* 📖 GÜNÜN SÖZLÜĞÜ (Doğrudan Odak / Sekme Görünümü) */}
-        {timeframe === 'glossary' && (
-          <section className="bg-white border border-[#cbd5e1] rounded-sm p-4 sm:p-5 shadow-xs space-y-6">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#e2e8f0] flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <BookMarked className="w-4 h-4 text-[#b91c1c]" />
-                  <h2 className="font-bold text-xs sm:text-sm text-slate-900 font-mono uppercase tracking-wide">
-                    AML &amp; FinCrime Kavramlar Sözlüğü ({report.date || "22 Eylül 2026"})
-                  </h2>
-                </div>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-rose-50 text-[#b91c1c] border border-rose-200 font-bold">
-                  {filteredGlossary.length} Güncel Kavram
-                </span>
-              </div>
-
-              {/* Arama Çubuğu */}
-              <div className="relative max-w-md">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  value={glossarySearch}
-                  onChange={(e) => setGlossarySearch(e.target.value)}
-                  placeholder="Kavram ara... (örn: Smurfing, Layering, GNN, Mule)"
-                  className="w-full pl-9 pr-7 py-1.5 text-xs border border-slate-300 rounded bg-white text-slate-800 focus:outline-none focus:border-[#b91c1c] font-sans"
-                />
-                {glossarySearch && (
-                  <button onClick={() => setGlossarySearch('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400">
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-
-              {/* Sade Sözlük Kartları */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {filteredGlossary.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white border border-[#e2e8f0] rounded p-3.5 hover:border-slate-400 transition flex flex-col justify-between shadow-2xs"
-                  >
-                    <div className="pb-2 border-b border-slate-200">
-                      <h4 className="font-mono font-bold text-xs sm:text-[13px] text-slate-900 tracking-tight leading-snug">
-                        {item.term}
-                      </h4>
-                    </div>
-                    <p className="text-xs sm:text-[12.5px] text-slate-600 leading-relaxed font-normal pt-2">
-                      {item.definition}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* 💡 ZEKİCE AML FİKİRLERİ SEKME GÖRÜNÜMÜ */}
-        {timeframe === 'ideas' && (
+        {/* ========================================================
+            TAB 1: 💬 AML DÜNYASINDA NELER KONUŞULUYOR?
+            ======================================================== */}
+        {activeTab === 'talks' && (
           <section className="space-y-4">
             <div className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs">
               <div className="flex items-center justify-between pb-3 border-b border-slate-200">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-[#b91c1c]" />
+                  <MessageSquare className="w-5 h-5 text-[#721c24]" />
                   <h2 className="font-bold text-sm sm:text-base text-slate-900 font-mono uppercase">
-                    AML Ekipleri İçin Zekice Fikirler &amp; Aksiyon Reçeteleri
+                    AML Dünyasında Neler Konuşuluyor? (Topluluk &amp; Saha Nabzı)
                   </h2>
                 </div>
                 <span className="text-xs font-mono text-slate-500">
-                  {(report.actionableIdeas || []).length} Hazır Reçete
+                  r/AMLCompliance, X ve Adli İstihbarat Sinyalleri
                 </span>
               </div>
               <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Analistlerin doğrudan kopyalayıp kullanabileceği hazır LLM promptları, anomali kuralları ve OSINT sorguları.
+                Uyum görevlilerinin, MASAK/OFAC analistlerinin ve on-chain dedektiflerinin son 24 saat içinde en hararetle tartıştığı pratik sorunlar ve çözüm önerileri.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {(report.amlTalks || []).map((talk, idx) => (
+                <div key={talk.id || idx} className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3 flex flex-col justify-between hover:border-slate-400 transition">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2">
+                      <span className="font-mono font-bold text-[11px] text-[#721c24] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
+                        #{idx + 1} {talk.category}
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                        {talk.source}
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-sm text-slate-900 leading-snug">{talk.title}</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed font-sans">{talk.summary}</p>
+                  </div>
+                  <div className="p-3 bg-amber-50/60 border border-amber-200 rounded text-xs space-y-1 mt-2">
+                    <strong className="text-amber-950 font-mono text-[10px] uppercase block">💡 Operasyonel Çıkarım &amp; Çözüm:</strong>
+                    <p className="text-amber-900 leading-relaxed">{talk.keyInsight}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ========================================================
+            TAB 2: 💡 AML DÜNYASINDA YENİ GELİŞMELER VE FİKİRLER?
+            ======================================================== */}
+        {activeTab === 'developments' && (
+          <section className="space-y-4">
+            <div className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-[#721c24]" />
+                  <h2 className="font-bold text-sm sm:text-base text-slate-900 font-mono uppercase">
+                    AML Dünyasında Yeni Gelişmeler ve Zekice Fikirler
+                  </h2>
+                </div>
+                <span className="text-xs font-mono text-slate-500">
+                  İşlem İzleme, SAR/STR ve Anomali Reçeteleri
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                Banka ve fintek uyum birimlerinin doğrudan uygulayabileceği test edilmiş kural mantıkları, prompt şablonları ve anomali algoritmaları.
               </p>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
-              {(report.actionableIdeas || []).map((idea, idx) => (
+              {(report.newDevelopmentsAndIdeas || []).map((idea, idx) => (
                 <div key={idea.id || idx} className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3">
                   <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2">
-                    <span className="font-mono font-bold text-xs text-[#b91c1c] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
+                    <span className="font-mono font-bold text-xs text-[#721c24] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
                       #{idx + 1} {idea.category} • {idea.badge}
                     </span>
-                    <span className="text-[11px] font-mono text-slate-500">
+                    <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
                       ⚡ {idea.expectedImpact}
                     </span>
                   </div>
@@ -635,7 +587,7 @@ ${idea.promptOrLogic}
                         className="absolute right-2 top-2 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[10px] flex items-center gap-1 transition cursor-pointer"
                       >
                         {copiedCmdId === idea.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                        <span>{copiedCmdId === idea.id ? 'Kopyalandı' : 'Kodu Kopyala'}</span>
+                        <span>{copiedCmdId === idea.id ? 'Kopyalandı' : 'Kodu / Promptu Kopyala'}</span>
                       </button>
                       <pre className="whitespace-pre-wrap pr-16">{idea.promptOrLogic}</pre>
                     </div>
@@ -646,8 +598,252 @@ ${idea.promptOrLogic}
           </section>
         )}
 
-        {/* 📋 DANIŞMAN RAPORU (BÜLTEN) GÖRÜNÜMÜ */}
-        {timeframe === 'report' && (
+        {/* ========================================================
+            TAB 3: 🔍 MÜŞTERİ İNCELEME SÜREÇLERİNE DAİR TEKNOLOJİK GELİŞMELER VE FİKİRLER
+            ======================================================== */}
+        {activeTab === 'cdd_kyc' && (
+          <section className="space-y-4">
+            <div className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-[#721c24]" />
+                  <h2 className="font-bold text-sm sm:text-base text-slate-900 font-mono uppercase">
+                    Müşteri İnceleme Süreçlerine Dair Teknolojik Gelişmeler ve Fikirler (CDD / KYC / UBO)
+                  </h2>
+                </div>
+                <span className="text-xs font-mono text-slate-500">
+                  Sentetik Kimlik, Paravan Ağlar ve pKYC
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                Müşteri kabulünde deepfake biyometrik atlatma savunması, Ticaret Sicil'den otomatik UBO (Nihai Gerçek Faydalanıcı) tespiti ve sürekli müşteri incelemesi (pKYC) modelleri.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
+              {(report.cddKycInnovations || []).map((kyc, idx) => (
+                <div key={kyc.id || idx} className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3">
+                  <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2">
+                    <span className="font-mono font-bold text-xs text-[#721c24] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
+                      #{idx + 1} {kyc.category} • {kyc.badge}
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-500">
+                      ⚡ {kyc.expectedImpact}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-sm text-slate-900">{kyc.title}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div className="p-3 bg-slate-50 border border-slate-200 rounded">
+                      <strong className="text-rose-900 block mb-1 font-mono uppercase text-[10px]">⚠️ Kimlik &amp; Kabul Açığı:</strong>
+                      <p className="text-slate-700 leading-relaxed">{kyc.problem}</p>
+                    </div>
+                    <div className="p-3 bg-slate-50 border border-slate-200 rounded">
+                      <strong className="text-emerald-900 block mb-1 font-mono uppercase text-[10px]">💡 Yeni Nesil Teknoloji:</strong>
+                      <p className="text-slate-700 leading-relaxed">{kyc.solution}</p>
+                    </div>
+                  </div>
+                  {kyc.promptOrLogic && (
+                    <div className="relative bg-slate-900 text-emerald-400 p-3 rounded font-mono text-xs overflow-x-auto">
+                      <button
+                        onClick={() => handleCopyCmd(kyc.id, kyc.promptOrLogic)}
+                        className="absolute right-2 top-2 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[10px] flex items-center gap-1 transition cursor-pointer"
+                      >
+                        {copiedCmdId === kyc.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                        <span>{copiedCmdId === kyc.id ? 'Kopyalandı' : 'Sorgu / Kodu Kopyala'}</span>
+                      </button>
+                      <pre className="whitespace-pre-wrap pr-16">{kyc.promptOrLogic}</pre>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ========================================================
+            TAB 4: 🏛️ OTORİTELERDE DURUM NASIL? (FATF, MASAK, OFAC, FinCEN, EBA)
+            ======================================================== */}
+        {activeTab === 'authorities' && (
+          <section className="space-y-4">
+            <div className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200 flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-[#721c24]" />
+                  <h2 className="font-bold text-sm sm:text-base text-slate-900 font-mono uppercase">
+                    Otoritelerde Durum Nasıl? (FATF, MASAK, OFAC, FinCEN, EBA)
+                  </h2>
+                </div>
+                <span className="text-xs font-mono text-slate-500">
+                  Son 24 Saatlik Resmi Regülasyon &amp; Yaptırım Taraması
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                Apify ve resmi veri kaynakları üzerinden taranan ulusal ve uluslararası mali suç otoritelerinin güncel duyuruları, SDN yaptırım kararları ve gri liste hareketleri.
+              </p>
+
+              {/* Otorite Hızlı Filtre Butonları */}
+              <div className="flex items-center gap-1.5 pt-3 mt-3 border-t border-slate-100 flex-wrap">
+                <span className="text-[11px] font-mono font-bold text-slate-500 mr-1">FİLTRELE:</span>
+                {['all', 'MASAK', 'OFAC', 'FATF', 'FinCEN', 'EBA'].map(auth => (
+                  <button
+                    key={auth}
+                    onClick={() => setSelectedAuthFilter(auth)}
+                    className={`px-2.5 py-1 rounded text-xs font-mono font-bold cursor-pointer transition ${
+                      selectedAuthFilter === auth 
+                        ? 'bg-[#721c24] text-white shadow-2xs' 
+                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    }`}
+                  >
+                    {auth === 'all' ? 'Tüm Otoriteler' : auth}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {filteredAuthorities.map((auth, idx) => (
+                <div key={auth.id || idx} className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3 flex flex-col justify-between hover:border-slate-400 transition">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2">
+                      <span className="font-mono font-bold text-xs text-[#721c24] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
+                        🏛️ {auth.authority}
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-500">
+                        {auth.country} • {auth.date}
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-sm text-slate-900 leading-snug">{auth.title}</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed font-sans">{auth.summary}</p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">
+                      Önem: {auth.impact || 'Yüksek'}
+                    </span>
+                    <a
+                      href={auth.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#721c24] hover:underline font-mono text-xs font-bold inline-flex items-center gap-1"
+                    >
+                      <span>Resmi Duyuru</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ========================================================
+            TAB 5: 📖 GÜNÜN AML SÖZLÜĞÜ (GÜNÜN 9 KAVRAMI + GEÇMİŞ ARŞİV)
+            ======================================================== */}
+        {activeTab === 'glossary' && (
+          <section className="bg-white border border-[#cbd5e1] rounded-sm p-4 sm:p-5 shadow-xs space-y-6">
+            
+            {/* 1. KISIM: GÜNÜN 9 KİLİT KAVRAMI */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#e2e8f0] flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <BookMarked className="w-4 h-4 text-[#721c24]" />
+                  <h2 className="font-bold text-xs sm:text-sm text-slate-900 font-mono uppercase tracking-wide">
+                    Günün AML Sözlüğü ({report.date || '22 Eylül 2026'})
+                  </h2>
+                  <span className="text-[11px] font-mono text-slate-500 hidden sm:inline">
+                    • Bugün Sitede ve Gündemde Geçen 9 Kilit Kavram
+                  </span>
+                </div>
+                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-rose-50 text-[#721c24] border border-rose-200 font-bold">
+                  9 Güncel Kavram
+                </span>
+              </div>
+
+              {/* Sade 9 Sözlük Kartı (Subgrid hizalı) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {todayGlossary.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-white border border-[#e2e8f0] rounded p-3.5 hover:border-slate-400 transition flex flex-col justify-between shadow-2xs"
+                  >
+                    <div className="pb-2 border-b border-slate-200">
+                      <h4 className="font-mono font-bold text-xs sm:text-[13px] text-slate-900 tracking-tight leading-snug">
+                        {item.term}
+                      </h4>
+                    </div>
+                    <p className="text-xs sm:text-[12.5px] text-slate-600 leading-relaxed font-normal pt-2">
+                      {item.definition}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 2. KISIM: O GÜNE KADARKİ TÜM KAVRAMLAR ARŞİVİ (TEKRARSIZ & ARAMALI) */}
+            <div className="space-y-3 pt-5 border-t-2 border-[#cbd5e1]">
+              <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-[#e2e8f0]">
+                <div className="flex items-center gap-2">
+                  <History className="w-4 h-4 text-slate-600" />
+                  <h3 className="font-bold text-xs sm:text-sm text-slate-900 font-mono uppercase tracking-wide">
+                    Geçmiş Kavramlar Arşivi
+                  </h3>
+                  <span className="text-[11px] font-mono text-slate-500">
+                    • {filteredArchiveGlossary.length} Benzersiz Kavram (Tekrarsız Birikimli Havuz)
+                  </span>
+                </div>
+
+                {/* Canlı Arama Kutusu */}
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={glossarySearch}
+                    onChange={(e) => setGlossarySearch(e.target.value)}
+                    placeholder="Arşivde kavram ara... (örn: Smurfing, GNN, Mule)"
+                    className="w-56 sm:w-72 pl-8 pr-7 py-1 text-xs border border-slate-300 rounded bg-white text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#721c24] font-sans"
+                  />
+                  {glossarySearch && (
+                    <button
+                      onClick={() => setGlossarySearch('')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {filteredArchiveGlossary.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-white border border-[#e2e8f0] rounded p-3.5 hover:border-slate-400 transition flex flex-col justify-between shadow-2xs"
+                  >
+                    <div className="pb-2 border-b border-slate-200 flex items-start justify-between gap-2">
+                      <h4 className="font-mono font-bold text-xs sm:text-[13px] text-slate-900 tracking-tight leading-snug">
+                        {item.term}
+                      </h4>
+                      {item.dateStr && (
+                        <span className="text-[9.5px] font-mono text-slate-400 shrink-0">
+                          {item.dateStr}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs sm:text-[12.5px] text-slate-600 leading-relaxed font-normal pt-2">
+                      {item.definition}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </section>
+        )}
+
+        {/* ========================================================
+            TAB 6: 📋 DANIŞMAN BÜLTENİ
+            ======================================================== */}
+        {activeTab === 'report' && (
           <section className="bg-white border border-[#cbd5e1] rounded-sm p-4 sm:p-6 shadow-xs space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200 flex-wrap gap-2">
               <div>
@@ -660,7 +856,7 @@ ${idea.promptOrLogic}
               </div>
               <button
                 onClick={handleCopyMarkdown}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#b91c1c] hover:bg-[#991b1b] text-white rounded font-mono text-xs font-bold transition cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#721c24] hover:bg-[#5c0f1c] text-white rounded font-mono text-xs font-bold transition cursor-pointer"
               >
                 {copiedMd ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 <span>{copiedMd ? 'Markdown Kopyalandı!' : 'Bülteni Markdown Kopyala'}</span>
@@ -668,7 +864,7 @@ ${idea.promptOrLogic}
             </div>
 
             <div className="space-y-4 text-xs text-slate-700 leading-relaxed font-normal">
-              <div className="p-3.5 bg-rose-50 border-l-4 border-l-[#b91c1c] rounded-r">
+              <div className="p-3.5 bg-rose-50 border-l-4 border-l-[#721c24] rounded-r">
                 <span className="font-mono font-bold text-rose-950 uppercase block mb-1">
                   🚨 GÜNÜN FLAŞ UYARISI:
                 </span>
@@ -680,233 +876,30 @@ ${idea.promptOrLogic}
                 <h3 className="font-bold font-mono text-slate-900 uppercase text-xs">📋 Yönetici Brifingi:</h3>
                 <p className="whitespace-pre-line text-slate-800 leading-relaxed">{report.executiveSummary}</p>
               </div>
-
-              <div className="space-y-3 pt-3 border-t border-slate-200">
-                <h3 className="font-bold font-mono text-slate-900 uppercase text-xs">⚡ Yükselen Aklama Tipolojileri Tablosu:</h3>
-                <table className="w-full border-collapse border border-slate-200 text-xs">
-                  <thead className="bg-slate-100 font-mono text-slate-700">
-                    <tr>
-                      <th className="border border-slate-200 p-2 text-left">Tipoloji</th>
-                      <th className="border border-slate-200 p-2 text-center">Risk Skoru</th>
-                      <th className="border border-slate-200 p-2 text-center">Trend (Delta)</th>
-                      <th className="border border-slate-200 p-2 text-left">Hedef Sektör</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(report.threatAndTypologyMatrix || []).map((t, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50">
-                        <td className="border border-slate-200 p-2 font-semibold text-slate-900">{t.name}</td>
-                        <td className="border border-slate-200 p-2 text-center font-mono font-bold text-rose-700">{t.riskScore}/10</td>
-                        <td className="border border-slate-200 p-2 text-center font-mono text-emerald-700 font-bold">{t.delta}</td>
-                        <td className="border border-slate-200 p-2 text-slate-600">{t.targetSector}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
             </div>
           </section>
         )}
 
-        {/* Kategori Filtre Çubuğu (Tablo Görünümünde) */}
-        {timeframe !== 'report' && timeframe !== 'glossary' && timeframe !== 'ideas' && (
-          <div className="bg-white border border-[#d1d5db] p-2 rounded-sm shadow-xs flex flex-wrap items-center gap-1 sm:gap-1.5">
-            <div className="flex items-center gap-1 text-[11px] font-mono text-slate-500 font-bold px-1 sm:px-2 whitespace-nowrap">
-              <Filter className="w-3 h-3 text-[#b91c1c]" />
-              <span>KATEGORİ:</span>
-            </div>
-            {CATEGORY_DEFINITIONS.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-2 py-0.5 sm:px-2.5 sm:py-1 text-[11px] sm:text-xs font-medium whitespace-nowrap transition border rounded-xs cursor-pointer ${
-                  selectedCategory === cat.id
-                    ? 'bg-[#b91c1c] text-white border-[#b91c1c] font-bold shadow-xs'
-                    : 'bg-[#f9fafb] text-slate-700 hover:bg-slate-100 border-[#e5e7eb]'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* 5. MASAÜSTÜ EXCEL IZGARA TABLOSU (hidden md:block - RED THEME) */}
-        {timeframe !== 'report' && timeframe !== 'glossary' && timeframe !== 'ideas' && (
-          <div className="hidden md:block bg-white border border-[#d1d5db] shadow-xs overflow-hidden">
-            <table className="w-full table-fixed text-left border-collapse font-sans text-xs">
-              <colgroup>
-                <col className="w-12" />
-                <col className="w-56" />
-                <col className="w-36" />
-                <col />
-                <col className="w-24" />
-                <col className="w-28" />
-                <col className="w-28" />
-              </colgroup>
-              
-              {/* Sütun Harfleri ve Başlıklar (A - G) */}
-              <thead>
-                <tr className="bg-[#f8fafc] border-b border-[#d1d5db] text-[10px] font-mono text-slate-500 select-none">
-                  <th className="w-12 text-center py-1 border-r border-[#e2e8f0]">A</th>
-                  <th className="w-56 px-3 py-1 border-r border-[#e2e8f0] text-left">B</th>
-                  <th className="w-36 px-3 py-1 border-r border-[#e2e8f0] text-left">C</th>
-                  <th className="px-3 py-1 border-r border-[#e2e8f0] text-left">D</th>
-                  <th className="w-24 px-3 py-1 border-r border-[#e2e8f0] text-right">E</th>
-                  <th className="w-28 px-3 py-1 border-r border-[#e2e8f0] text-right">F</th>
-                  <th className="w-28 px-3 py-1 text-center">G</th>
-                </tr>
-
-                <tr className="bg-[#f1f5f9] border-b-2 border-[#cbd5e1] text-[11px] font-semibold text-slate-700 select-none">
-                  <th className="w-12 text-center py-2.5 border-r border-[#cbd5e1]">Sıra</th>
-                  <th className="w-56 px-3 py-2.5 border-r border-[#cbd5e1] text-left">Tipoloji / Model Adı</th>
-                  <th className="w-36 px-3 py-2.5 border-r border-[#cbd5e1] text-left">Kategori</th>
-                  <th className="px-3 py-2.5 border-r border-[#cbd5e1] text-left">Temel Yetenek &amp; Fonksiyon</th>
-                  <th className="w-24 px-3 py-2.5 border-r border-[#cbd5e1] text-right">Risk Skoru</th>
-                  <th className="w-28 px-3 py-2.5 border-r border-[#cbd5e1] text-right">Trend / Delta</th>
-                  <th className="w-28 px-3 py-2.5 text-center">Kaynaklar</th>
-                </tr>
-              </thead>
-
-              {/* Tablo Satırları */}
-              <tbody className="divide-y divide-[#e2e8f0]">
-                {filteredTools.map((tool, idx) => {
-                  const isExpanded = expandedId === tool.id;
-
-                  return (
-                    <React.Fragment key={tool.id}>
-                      <tr 
-                        onClick={() => setExpandedId(isExpanded ? null : tool.id)}
-                        className={`h-11 cursor-pointer transition-colors select-none ${
-                          isExpanded 
-                            ? 'bg-[#fee2e2] border-l-4 border-l-[#b91c1c]' 
-                            : idx % 2 === 0 
-                              ? 'bg-white hover:bg-[#fef2f2]' 
-                              : 'bg-[#fafafa] hover:bg-[#fef2f2]'
-                        }`}
-                      >
-                        {/* Kolon A: Sıra */}
-                        <td className="w-12 text-center font-mono font-bold text-slate-600 border-r border-[#e2e8f0]">
-                          #{idx + 1}
-                        </td>
-
-                        {/* Kolon B: Model Adı */}
-                        <td className="w-56 px-3 border-r border-[#e2e8f0] truncate">
-                          <span className="font-bold text-slate-900 hover:text-[#b91c1c] transition truncate">
-                            {tool.name}
-                          </span>
-                        </td>
-
-                        {/* Kolon C: Kategori */}
-                        <td className="w-36 px-3 border-r border-[#e2e8f0] truncate">
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200">
-                            {tool.category}
-                          </span>
-                        </td>
-
-                        {/* Kolon D: Temel Fonksiyon */}
-                        <td className="px-3 border-r border-[#e2e8f0] truncate text-slate-600 text-[11px]">
-                          {tool.primaryFunction}
-                        </td>
-
-                        {/* Kolon E: Risk Skoru */}
-                        <td className="w-24 px-3 border-r border-[#e2e8f0] text-right font-mono">
-                          <span className="font-black text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
-                            {tool.hypeScore}/10
-                          </span>
-                        </td>
-
-                        {/* Kolon F: Trend */}
-                        <td className="w-28 px-3 border-r border-[#e2e8f0] text-right font-mono">
-                          <span className="inline-flex items-center gap-0.5 text-emerald-700 font-bold text-[11px]">
-                            {tool.scoreDelta > 0 ? `+${tool.scoreDelta}` : tool.scoreDelta === 0 ? '0.0' : tool.scoreDelta}
-                          </span>
-                        </td>
-
-                        {/* Kolon G: Kaynaklar */}
-                        <td className="w-28 px-3 text-center truncate text-[10px] text-slate-500 font-mono">
-                          {(tool.sources || []).join(', ')}
-                        </td>
-                      </tr>
-
-                      {/* Genişletilmiş Satır Detayı */}
-                      {isExpanded && (
-                        <tr className="bg-[#fff1f2] border-b border-rose-200">
-                          <td colSpan={7} className="p-4">
-                            <div className="space-y-3 font-mono text-xs">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <div className="p-3 bg-white rounded border border-rose-200">
-                                  <span className="text-[10px] font-bold text-rose-950 uppercase block mb-1">
-                                    📌 Neden Gündemde?
-                                  </span>
-                                  <p className="text-slate-800 text-[11px] leading-relaxed font-sans">
-                                    {tool.whyTrending}
-                                  </p>
-                                </div>
-                                <div className="p-3 bg-white rounded border border-rose-200">
-                                  <span className="text-[10px] font-bold text-rose-950 uppercase block mb-1">
-                                    ⚡ Yetenek &amp; Detay:
-                                  </span>
-                                  <p className="text-slate-800 text-[11px] leading-relaxed font-sans">
-                                    {tool.primaryFunction}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {/* 6. MOBİL KART LİSTESİ (md:hidden) */}
-        {timeframe !== 'report' && timeframe !== 'glossary' && timeframe !== 'ideas' && (
-          <div className="md:hidden space-y-2.5">
-            {filteredTools.map((tool, idx) => (
-              <div 
-                key={tool.id} 
-                onClick={() => setExpandedId(expandedId === tool.id ? null : tool.id)}
-                className="bg-white border border-[#cbd5e1] rounded-sm p-3 shadow-2xs space-y-2 cursor-pointer"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-[#b91c1c] text-xs">#{idx + 1}</span>
-                    <h3 className="font-bold text-slate-900 text-xs">{tool.name}</h3>
-                  </div>
-                  <span className="font-mono font-black text-rose-700 text-xs bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
-                    {tool.hypeScore}/10
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-600 leading-tight">
-                  {tool.primaryFunction}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-
       </main>
 
-      {/* 8. SADE EXCEL DURUM ÇUBUĞU (Bottom Status Bar - RED THEME) */}
+      {/* 8. SADE EXCEL DURUM ÇUBUĞU (Bottom Status Bar - MATTE LIPSTICK RED THEME) */}
       <footer className="bg-[#e5e7eb] border-t border-[#d1d5db] px-4 py-1.5 flex items-center justify-between text-xs font-mono text-slate-600 select-none flex-wrap gap-2">
         <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
-          <span className="font-bold text-[#b91c1c]">HAZIR</span>
-          <span>TOPLAM: {filteredTools.length} TİPOLOJİ / MODEL</span>
-          <span className="hidden sm:inline">ORTALAMA RİSK: {avgHypeScore}</span>
+          <span className="font-bold text-[#721c24]">HAZIR</span>
+          <span>DURUM: AKTİF İSTİHBARAT</span>
+          <span className="hidden sm:inline">KÜRESEL RİSK: {report.threatMeter?.overallScore || 8.8}/10</span>
           <span className="hidden md:inline text-slate-500">
-            | MOTOR: <strong className="text-slate-800">DeepSeek v3</strong>
+            | MOTOR: <strong className="text-slate-800">DeepSeek v3 (Çift LLM)</strong>
           </span>
           <span className="hidden md:inline text-slate-500">
             | SÜRE: <strong className="text-slate-800">{report.durationSeconds || 69}s</strong>
           </span>
         </div>
         <div className="flex items-center gap-3 sm:gap-4 text-[11px]">
-          <span className="hidden sm:inline">50 TOPLULUK</span>
+          <span className="hidden lg:inline text-slate-500">
+            1. LLM: <strong className="text-rose-900">{p1TotalK}k</strong> | 2. LLM: <strong className="text-cyan-900">{p2TotalK}k</strong> | TOPLAM: <strong className="text-slate-900">{totalK}k</strong>
+          </span>
+          <span className="hidden sm:inline">50 TOPLULUK + 5 OTORİTE</span>
           <span>%100 ZOOM</span>
         </div>
       </footer>
