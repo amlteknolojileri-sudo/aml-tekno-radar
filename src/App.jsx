@@ -430,7 +430,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                       </p>
                     </div>
                     <div className="text-[11px] text-slate-600 pt-2 border-t border-rose-100 leading-normal">
-                      Perakende bankacılık ve VASP ekosisteminde kritik alarm seviyesinde değerlendirilen bu akış, kural motorlarının dinamik hesap bekleme sürelerini denetlemesini zorunlu kılıyor.
+                      Perakende bankacılık ve VASP ekosisteminde yakından izlenen bu akış, kural motorlarının dinamik hesap bekleme sürelerini denetlemesini zorunlu kılıyor.
                     </div>
                   </div>
 
@@ -482,7 +482,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
         )}
 
         {/* ========================================================
-            TAB 1: 💬 AML DÜNYASINDA NELER KONUŞULUYOR?
+            TAB 1: AML DÜNYASINDA NELER KONUŞULUYOR?
             ======================================================== */}
         {activeTab === 'talks' && (
           <section className="space-y-4">
@@ -525,12 +525,12 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {(report.twitterPulse.dominantTopics || []).map((t, idx) => (
                     <div key={idx} className="bg-white border border-[#cbd5e1] rounded-sm p-3 space-y-1.5 hover:border-[#721c24]/50 transition shadow-2xs">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[11px] font-bold text-[#721c24] bg-rose-50 border border-rose-200 px-1.5 py-0.2 rounded">
+                      <div className="flex items-center justify-between text-[11px] font-mono pb-1 border-b border-slate-100">
+                        <span className="font-bold text-[#721c24]">
                           Gündem #{idx + 1}
                         </span>
-                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200 font-medium">
-                          %{t.sharePercentage} Paylaşım Hacmi
+                        <span className="text-slate-500">
+                          %{t.sharePercentage} Pay
                         </span>
                       </div>
                       <h4 className="font-bold text-xs text-slate-900 leading-snug">{t.topic}</h4>
@@ -562,11 +562,11 @@ ${(report.authoritiesPulse || []).map((a, i) => `
               {(report.amlTalks || []).map((talk, idx) => (
                 <div key={talk.id || idx} className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3 flex flex-col justify-between hover:border-slate-400 transition">
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2">
-                      <span className="font-mono font-bold text-[11px] text-[#721c24] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
-                        #{idx + 1} {talk.category}
+                    <div className="flex items-center justify-between text-xs font-mono pb-1.5 border-b border-slate-100">
+                      <span className="font-bold text-[#721c24]">
+                        {talk.category}
                       </span>
-                      <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                      <span className="text-slate-400">
                         {talk.source}
                       </span>
                     </div>
@@ -608,15 +608,10 @@ ${(report.authoritiesPulse || []).map((a, i) => `
             <div className="grid grid-cols-1 gap-4">
               {(report.newDevelopmentsAndIdeas || []).map((idea, idx) => (
                 <div key={idea.id || idx} className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3">
-                  <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2">
-                    <span className="font-mono font-bold text-xs text-[#721c24] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
-                      #{idx + 1} {idea.category} • {idea.badge}
-                    </span>
-                    <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
-                      {idea.expectedImpact}
-                    </span>
+                  <div className="text-xs font-mono text-[#721c24] font-bold uppercase tracking-wide pb-1 border-b border-slate-100">
+                    {idea.category}
                   </div>
-                  <h3 className="font-bold text-sm text-slate-900">{idea.title}</h3>
+                  <h3 className="font-bold text-sm sm:text-base text-slate-900 leading-snug">{idea.title}</h3>
                   <div className="p-3.5 bg-[#f8fafc] border border-slate-200 rounded-sm text-xs space-y-2.5">
                     <p className="text-slate-700 leading-relaxed font-sans">
                       {idea.problem}
@@ -667,15 +662,10 @@ ${(report.authoritiesPulse || []).map((a, i) => `
             <div className="grid grid-cols-1 gap-4">
               {(report.cddKycInnovations || []).map((kyc, idx) => (
                 <div key={kyc.id || idx} className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3">
-                  <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2">
-                    <span className="font-mono font-bold text-xs text-[#721c24] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
-                      #{idx + 1} {kyc.category} • {kyc.badge}
-                    </span>
-                    <span className="text-[11px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 font-medium">
-                      {kyc.expectedImpact}
-                    </span>
+                  <div className="text-xs font-mono text-[#721c24] font-bold uppercase tracking-wide pb-1 border-b border-slate-100">
+                    {kyc.category}
                   </div>
-                  <h3 className="font-bold text-sm text-slate-900">{kyc.title}</h3>
+                  <h3 className="font-bold text-sm sm:text-base text-slate-900 leading-snug">{kyc.title}</h3>
                   <div className="p-3.5 bg-[#f8fafc] border border-slate-200 rounded-sm text-xs space-y-2.5">
                     <p className="text-slate-700 leading-relaxed font-sans">
                       {kyc.problem}
@@ -745,11 +735,11 @@ ${(report.authoritiesPulse || []).map((a, i) => `
               {filteredAuthorities.map((auth, idx) => (
                 <div key={auth.id || idx} className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3 flex flex-col justify-between hover:border-slate-400 transition">
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2">
-                      <span className="font-mono font-bold text-xs text-[#721c24] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
+                    <div className="flex items-center justify-between text-xs font-mono pb-1.5 border-b border-slate-100">
+                      <span className="font-bold text-[#721c24]">
                         {auth.authority}
                       </span>
-                      <span className="text-[10px] font-mono text-slate-500">
+                      <span className="text-slate-400">
                         {auth.country} • {auth.date}
                       </span>
                     </div>
@@ -757,10 +747,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                     <p className="text-xs text-slate-600 leading-relaxed font-sans">{auth.summary}</p>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">
-                      Önem: {auth.impact || 'Yüksek'}
-                    </span>
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-end text-xs">
                     <a
                       href={auth.url}
                       target="_blank"
@@ -778,7 +765,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
         )}
 
         {/* ========================================================
-            TAB 5: 📖 GÜNÜN AML SÖZLÜĞÜ (GÜNÜN 9 KAVRAMI + GEÇMİŞ ARŞİV)
+            TAB 5: GÜNÜN AML SÖZLÜĞÜ (GÜNÜN 9 KAVRAMI + GEÇMİŞ ARŞİV)
             ======================================================== */}
         {activeTab === 'glossary' && (
           <section className="bg-white border border-[#cbd5e1] rounded-sm p-4 sm:p-5 shadow-xs space-y-6">
@@ -795,9 +782,6 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                     • Bugün Sitede ve Gündemde Geçen 9 Kilit Kavram
                   </span>
                 </div>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-rose-50 text-[#721c24] border border-rose-200 font-bold">
-                  9 Güncel Kavram
-                </span>
               </div>
 
               {/* Sade 9 Sözlük Kartı (Subgrid hizalı) */}
