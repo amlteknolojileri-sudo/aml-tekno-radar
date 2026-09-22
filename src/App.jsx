@@ -499,55 +499,38 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                 </span>
               </div>
               <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Uyum görevlilerinin, MASAK/OFAC analistlerinin ve bağımsız on-chain dedektiflerinin son 24 saat içinde en hararetle tartıştığı pratik sorunlar, duygu analizi ve çözüm önerileri.
+                Uyum görevlilerinin, MASAK/OFAC analistlerinin ve bağımsız on-chain dedektiflerinin son 24 saat içinde en hararetle tartıştığı pratik sorunlar, saha bulguları ve çözüm önerileri.
               </p>
             </div>
 
-            {/* 🐦 TWITTER / X ÖZEL TARTIM & DUYGU ANALİZİ (OTORİTE DIŞI UZMANLAR - EXCEL TEMASINA UYUMLU) */}
+            {/* TWITTER / X ÖZEL GÜNDEM (OTORİTE DIŞI UZMANLAR - EXCEL TEMASINA UYUMLU) */}
             {report.twitterPulse && (
               <div className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs space-y-3.5">
                 <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 border-b border-slate-200">
                   <div className="flex items-center gap-2">
                     <span className="bg-rose-50 text-[#721c24] border border-rose-200 px-2.5 py-1 rounded font-mono font-bold text-xs uppercase flex items-center gap-1.5 shadow-2xs">
                       <Flame className="w-3.5 h-3.5 text-[#721c24]" />
-                      X (Twitter) AML Gündemi &amp; Tartım
+                      X (Twitter) AML Gündemi
                     </span>
                     <span className="text-xs text-slate-500 font-mono hidden sm:inline">
                       (Otoriteler Hariç: Bağımsız Analistler, Dedektifler &amp; Gazeteciler)
                     </span>
                   </div>
                   <span className="text-[11px] font-mono text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded font-medium">
-                    {report.twitterPulse.totalAnalyzed || 45} Uzman Paylaşımı Tartıldı
+                    {report.twitterPulse.totalAnalyzed || 45} Uzman Paylaşımı İncelendi
                   </span>
                 </div>
 
-                {/* Duygu Tartım Çubuğu (Sentiment Bar - Mat Kurumsal Renkler) */}
-                <div className="space-y-1.5 bg-[#fdfbfb] border border-rose-100 p-3 rounded-sm">
-                  <div className="flex items-center justify-between text-xs font-mono text-slate-700 flex-wrap gap-2">
-                    <span className="font-bold text-slate-800">Topluluk Duygu Tartımı:</span>
-                    <div className="flex items-center gap-3 text-[11px]">
-                      <span className="text-[#721c24] font-semibold flex items-center gap-1">● %{report.twitterPulse.sentimentDistribution?.critical || 58} Kritik / Endişeli</span>
-                      <span className="text-emerald-700 font-semibold flex items-center gap-1">● %{report.twitterPulse.sentimentDistribution?.solutionOriented || 28} Çözüm Odaklı</span>
-                      <span className="text-sky-700 font-semibold flex items-center gap-1">● %{report.twitterPulse.sentimentDistribution?.informative || 14} Bilgilendirici</span>
-                    </div>
-                  </div>
-                  <div className="w-full h-2.5 bg-slate-200 rounded-xs overflow-hidden flex border border-slate-300/40">
-                    <div style={{ width: `${report.twitterPulse.sentimentDistribution?.critical || 58}%` }} className="bg-[#721c24] h-full" title="Kritik / Endişeli" />
-                    <div style={{ width: `${report.twitterPulse.sentimentDistribution?.solutionOriented || 28}%` }} className="bg-emerald-600 h-full" title="Çözüm Odaklı" />
-                    <div style={{ width: `${report.twitterPulse.sentimentDistribution?.informative || 14}%` }} className="bg-sky-600 h-full" title="Bilgilendirici" />
-                  </div>
-                </div>
-
-                {/* Twitter'da Öne Çıkan Başlıklar & Ağırlıkları (Excel Hücre Kartları) */}
+                {/* Twitter'da Öne Çıkan Başlıklar & Hacim Payları (Excel Hücre Kartları) */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {(report.twitterPulse.dominantTopics || []).map((t, idx) => (
                     <div key={idx} className="bg-white border border-[#cbd5e1] rounded-sm p-3 space-y-1.5 hover:border-[#721c24]/50 transition shadow-2xs">
                       <div className="flex items-center justify-between">
                         <span className="font-mono text-[11px] font-bold text-[#721c24] bg-rose-50 border border-rose-200 px-1.5 py-0.2 rounded">
-                          #{idx + 1} Ağırlık: %{t.sharePercentage}
+                          Gündem #{idx + 1}
                         </span>
                         <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200 font-medium">
-                          {t.sentiment}
+                          %{t.sharePercentage} Paylaşım Hacmi
                         </span>
                       </div>
                       <h4 className="font-bold text-xs text-slate-900 leading-snug">{t.topic}</h4>
