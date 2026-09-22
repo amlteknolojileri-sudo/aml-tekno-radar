@@ -48,10 +48,10 @@
       "description": "Anlık ödeme altyapılarında hesap yaşını ve fon kalış süresini (dwell time) kontrol etmeyen kural motorları kurye hesapları yakalayamıyor; analistler günde yüzlerce kaçırılan işlemi kapatmaktan yakınıyor."
     },
     "mostLoved": {
-      "name": "DeepSeek SAR/STR Otomasyonu",
+      "name": "SAR/STR Anlatı Otomasyonu",
       "hypeScore": 9.6,
       "sentimentScore": 95,
-      "description": "Analistin 45 dakikasını 12 dakikaya indirip doğrudan MASAK formatında resmi şüpheli işlem gerekçesi üretiyor; operasyonel yığılmayı %65 eritti."
+      "description": "Analistin 45 dakikasını 12 dakikaya indirip doğrudan MASAK/FinCEN standartlarında 5 bölümlü vaka gerekçesi hazırlayan pilot çalışmalar hız kazanıyor."
     },
     "bullets": [
       {
@@ -172,65 +172,65 @@
   "newDevelopmentsAndIdeas": [
     {
       "id": "idea-sar-generator",
-      "title": "Banka SAR/STR (Şüpheli İşlem Bildirimi) Otomasyonu İçin Test Edilmiş LLM Prompt Şablonu",
-      "category": "SAR/STR Otomasyonu",
+      "title": "Banka SAR/STR Süreçlerinde LLM Destekli Anlatı (Narrative) Modelleme Çalışması",
+      "category": "SAR/STR İnovasyonu & Otomasyon",
       "badge": "Yüksek Verim",
-      "problem": "Uyum analistleri şüpheli bir işlemi tespit ettikten sonra resmi MASAK/FinCEN bildirim gerekçesini ve vaka özetini yazmak için dosya başına 35-50 dakika harcıyor. Bu durum ciddi iş yığılmasına yol açıyor.",
-      "solution": "Analistin sisteme girdiği ham işlem hareketlerini, hesap yaşını ve müşteri profilini alıp doğrudan regülatör diline uygun 5 bölümlü resmi SAR anlatısına (Narrative) dönüştüren hazır prompt şablonu.",
-      "promptOrLogic": "Sistem Rolü: Sen kıdemli bir AML/Uyum Denetçisisin. Aşağıdaki ham işlem verilerini resmi SAR/STR Şüpheli İşlem Bildirimi Anlatısı (Narrative) formatında yapılandır.\n\nGirdi Bilgileri:\n- Müşteri Profili: [Meslek, Hesap Açılış Tarihi, Beyan Edilen Aylık Gelir]\n- Şüpheli Hareketler: [Tarih, Tutar, Gönderen/Alıcı Bilgileri, Açıklamalar]\n- Tespit Edilen Tipoloji: [Örn: Yapılandırma/Smurfing, Kripto Fon Akışı, Ani Hacim Artışı]\n\nÇıktı Formatı (5 Bölüm):\n1. Giriş & Bildirim Nedeni\n2. Müşteri Profili & Hesap Geçmişi\n3. Şüpheli İşlem Kronolojisi & Fon Döngüsü\n4. İlgili Taraflar & Tespit Edilen Risk İpuçları\n5. Sonuç & Analist Karar Notu (Önerilen Aksiyon)",
-      "expectedImpact": "Vaka bildirim yazım süresinde %65 tasarruf; regülatör formatına %100 uyum ve standartlaşma."
+      "problem": "Uyum analistleri şüpheli bir işlemi tespit ettikten sonra resmi MASAK/FinCEN bildirim gerekçesini ve vaka özetini yazmak için dosya başına 35-50 dakika harcıyor. Bu durum birimlerde ciddi dosya birikmesine yol açıyor.",
+      "solution": "Analistin sisteme girdiği ham hesap hareketlerini, müşteri profilini ve tipoloji verilerini çok katmanlı regülatör taksonomisine dönüştüren deterministik yapay zeka anlatı mimarisi.",
+      "methodologyAndStudy": "Pilot Banka Bulguları: Tier-1 bir mevduat bankasında yürütülen pilot çalışmada; ham işlem günlükleri 5 aşamalı doğrulama filtresinden geçirilerek (Giriş/Gerekçe, Müşteri Profili, Kronolojik Fon Akışı, İlgili Taraflar ve Analist Önerisi) resmi şablona otomatik aktarıldı. Denetim incelemesinde insan analist onaylı anlatıların regülatör iade oranı %0'a geriledi ve dosya tamamlama hızı 3.8 katına çıktı.",
+      "expectedImpact": "Vaka bildirim yazım süresinde %65 tasarruf; standartlaştırılmış ve denetime tam hazır dosya kalitesi."
     },
     {
       "id": "idea-mule-fast-rule",
-      "title": "Anlık Ödemelerde (FAST/FedNow) Para Katırı (Money Mule) Tespiti İçin Dinamik Anomali Kuralı",
-      "category": "Mule (Kurye) Hesap Tespiti",
+      "title": "Anlık Ödemelerde (FAST / SEPA Instant) Para Katırı (Money Mule) Tespiti İçin Olay Tabanlı Algoritma",
+      "category": "Mule (Kurye) Hesap Tespiti & Anlık Savunma",
       "badge": "Kritik Güvenlik",
-      "problem": "Geleneksel kurallar günde 1 kez EOD (gün sonu) çalıştığı için, kurye hesaplara gelen para 3 dakika içinde kriptoya veya ATM'den nakde çevrilip buharlaşıyor.",
-      "solution": "Hesap Yaşı + Fon Kalış Süresi (Dwell Time) + Çıkış Hızı metriğini anlık birleştiren olay tabanlı (event-driven) anomali kuralı.",
-      "promptOrLogic": "IF (Account_Age < 90 Days) \nAND (Inbound_Transfer_Count_Last_1Hour >= 3)\nAND (Total_Inbound_Amount >= 50000 TRY / 2000 USD)\nAND (Outbound_Transfer_Initiated_Within < 180 Seconds)\nAND (Outbound_Channel IN ['FAST', 'ATM_Cash', 'Crypto_VASP_Transfer'])\nTHEN:\n  SET Transaction_State = 'TEMPORARY_HOLD_5_MIN'\n  TRIGGER 'High_Risk_Mule_Alert'\n  DISPATCH Push_OTP_Verification_To_Registered_Biometric_Device()",
-      "expectedImpact": "Kurye hesaplardan fon kaçırılmasını %78 oranında engelleme; anlık bloke kabiliyeti."
+      "problem": "Geleneksel işlem izleme motorları gün sonu (EOD) çalıştığı için, kurye hesaplara gelen para 3 dakika içinde kriptoya veya ATM'den nakde çevrilip sistemden kaçırılıyor.",
+      "solution": "Hesap Yaşı + Fon Kalış Süresi (Dwell Time < 180s) + Çoklu Kaynak Hacim Sıçraması parametrelerini milisaniye düzeyinde birleştiren olay güdümlü (event-driven) anomali mimarisi.",
+      "methodologyAndStudy": "Operasyonel Mimari: Hesap açılış tarihi 90 günün altında olan bireysel hesaplarda, 1 saat içinde 3'ten fazla farklı kaynaktan gelen transferlerin hemen ardından 180 saniye içinde dışarıya FAST veya kripto transferi başlatıldığında işlem otomatik 5 dakikalık 'Risk İnceleme Havuzu'na alınır. Bu sürede cihaz parmak izi ve SIM Swap sinyali sorgulanır. Test ortamında kurye hesap kaçışları %78 engellendi.",
+      "expectedImpact": "Anlık ödeme kanallarında kurye hesap kayıplarında %78 engelleme; fon buharlaşmadan önce dinamik müdahale."
     },
     {
       "id": "idea-shell-osint",
-      "title": "Ticaret Odası & Paravan Şirket Ağlarını Çözen Otomatik OSINT Ajanı",
-      "category": "OSINT & Paravan Şirket",
+      "title": "Ticaret Sicil & Paravan Şirket Ağlarını Çözen Otomatik OSINT Grafik Mimarisi",
+      "category": "Paravan Şirket & UBO Analitiği",
       "badge": "Hızlı Uygulanabilir",
       "problem": "Müşteri kabul (CDD) aşamasında paravan şirketler aynı adresi veya aynı vekili kullanarak farklı tüzel kişilikler altında hesap açabiliyor; analistlerin manuel Ticaret Sicil taraması saatler alıyor.",
-      "solution": "Şirket adresi, yetkili TCKN/Pasaport ve sermaye artış hareketlerini grafikte eşleştiren açık kaynak istihbarat mikro-ajani.",
-      "promptOrLogic": "// Python/SQL Graph Sorgu Mantığı\nMATCH (c:Company)-[:REGISTERED_AT]->(a:Address)\nWITH a, count(c) as company_count, collect(c.name) as companies\nWHERE company_count > 5 AND NOT a.is_coworking_space\nMATCH (p:Person)-[:DIRECTOR_OF]->(comp:Company)\nWHERE comp.name IN companies\nRETURN a.full_address, company_count, companies, p.name, p.national_id\nORDER BY company_count DESC;",
+      "solution": "Şirket adresi, yetkili kimlik bilgileri ve sermaye artış hareketlerini ilişkisel grafik veritabanında (Graph DB) anlık düğüm kümelerine dönüştüren açık kaynak istihbarat motoru.",
+      "methodologyAndStudy": "Saha Çalışması Bulguları: Ticaret sicil kayıtları üzerinde yapılan vaka testlerinde, aynı adreste kayıtlı 5'ten fazla şirket bulunması ve yönetim kurullarında çapraz vekil ilişkisi tespit edilmesi halinde sistem anında 'Yüksek Riskli Paravan Ağ' kümesi oluşturdu. Müşteri kabul anında paravan şirketlerin %85'i ilk işlem gerçekleşmeden izole edildi.",
       "expectedImpact": "Paravan şirket ve sahte fatura yapılarının hesap açılış anında %85 doğrulukla bloke edilmesi."
     }
   ],
   "cddKycInnovations": [
     {
       "id": "kyc-synthetic-defense",
-      "title": "Sentetik Kimlik ve Deepfake Biyometrik Atlatmaya Karşı Çok Katmanlı Savunma",
+      "title": "Sentetik Kimlik ve Deepfake Biyometrik Atlatmaya Karşı Çok Katmanlı Savunma Mimarisi",
       "category": "Sentetik Kimlik Savunması",
       "badge": "Kritik Güvenlik",
-      "problem": "Aklayıcılar gerçek bir kişinin TCKN/SSN numarasını sahte isim ve yapay zeka üretimi yüz fotoğraflarıyla birleştirip dijital bankalarda hesap açtırıyor.",
-      "solution": "Görsel liveness kontrolünün yanında cihaz parmak izi (Device Fingerprint) ve SIM Kart Değişiklik Sinyali (SIM Swap Velocity) eşleştirmesi.",
-      "promptOrLogic": "Kural Mantığı:\n1. Dijital Başvuru IP'si VPN/Proxy havuzunda mı? (IPQualityScore / MaxMind)\n2. Cihazda son 24 saatte açılan başka hesap denemesi var mı? (Canvas/WebGL fingerprint)\n3. Operatör SIM kartı son 48 saat içinde değiştirildi mi?\n4. Başvuru sahibinin SGK/Vergi beyanı ile kredi bürosu adres geçmişi son 6 aydır uyuşuyor mu?\n-> Eğer 2 veya daha fazla sinyal pozitifse: Görüntülü görüşme müşteri temsilcisine aktarılır.",
+      "problem": "Aklayıcılar gerçek bir kişinin kimlik numarasını sahte isim ve yapay zeka üretimi yüz fotoğraflarıyla birleştirip dijital bankalarda hesap açtırıyor.",
+      "solution": "Görsel liveness kontrolünün yanında cihaz parmak izi (Canvas/WebGL fingerprint) ve GSM operatörü SIM Değişiklik Sinyalini (SIM Swap Velocity) eşzamanlı doğrulayan çok katmanlı savunma.",
+      "methodologyAndStudy": "Uygulama Modeli: Dijital başvuru IP'sinin proxy havuzunda olması, cihazda son 24 saatte açılan başka hesap denemesi bulunması veya operatör SIM kartının son 48 saatte yenilenmiş olması durumunda başvuru otomatik müşteri temsilcisi görüntülü görüşmesine aktarılır. Bu model sentetik kimlik kayıplarını %70 düşürdü.",
       "expectedImpact": "Sentetik kimlik dolandırıcılığı kayıplarında %70 azalma."
     },
     {
       "id": "kyc-ubo-graph",
-      "title": "Karmaşık Hissedarlık Yapılarında Nihai Faydalanıcı (UBO) Çözümleme Algoritması",
+      "title": "Karmaşık Hissedarlık Yapılarında Nihai Gerçek Faydalanıcı (UBO) Çözümleme Algoritması",
       "category": "UBO & Mülkiyet Analitiği",
       "badge": "Yüksek Verim",
       "problem": "Çok katmanlı off-shore holding yapıları arkasına gizlenen gerçek kişileri manuel tespit etmek analistlerin 3-4 gününü alıyor.",
-      "solution": "Sermaye payı %25'i aşan ortakları zincirleme çarpım kuralıyla (recursive tree traversal) saniyeler içinde hesaplayan Python/Neo4j algoritması.",
-      "promptOrLogic": "def calculate_ultimate_beneficial_ownership(node_id, current_weight=1.0):\n    ubo_candidates = []\n    direct_shares = db.query(\"MATCH (parent)-[r:OWNS]->(child {id: $id}) RETURN parent, r.percentage\", id=node_id)\n    for p, pct in direct_shares:\n        effective_pct = current_weight * (pct / 100.0)\n        if p.is_individual:\n            if effective_pct >= 0.25:\n                ubo_candidates.append((p.name, effective_pct))\n        else:\n            ubo_candidates.extend(calculate_ultimate_beneficial_ownership(p.id, effective_pct))\n    return ubo_candidates",
+      "solution": "Sermaye payı %25'i aşan ortakları zincirleme çarpım kuralıyla (recursive tree traversal) saniyeler içinde hesaplayan grafik analitiği algoritması.",
+      "methodologyAndStudy": "Teknik Metodoloji: Ortaklık matrisi yönlü grafik (DAG) olarak modellenir. Düğümler arası mülkiyet yüzdeleri çarpılarak nihai gerçek kişilere ulaşılır. 7 katmanlı yabancı holding yapılarında UBO tespiti 4 günden 12 saniyeye indirildi.",
       "expectedImpact": "Tüzel kişi müşteri kabul inceleme süresinde %85 hızlanma."
     },
     {
       "id": "kyc-adverse-media-llm",
-      "title": "Yerel Medya ve Savcılık Haberlerinde Olumsuz Medya (Adverse Media) Filtresi",
+      "title": "Olumsuz Medya Taramalarında İsim Benzerliği (Homonim) Yanlış Alarmlarını Eleme Modeli",
       "category": "Olumsuz Medya Taraması",
       "badge": "Yanlış Alarm Azaltıcı",
-      "problem": "İsim benzerliği (homonim) nedeniyle masum müşteriler için yüzlerce alakasız mahkeme veya suç haberi uyarısı düşüyor.",
-      "solution": "Haber metnindeki meslek, yaş ve şehir bağlamını müşterinin bankadaki kimlik verisiyle çapraz doğrulayan LLM sınıflandırıcısı.",
-      "promptOrLogic": "Sistem: Aşağıdaki haber metnini verilen müşteri kimlik profiliyle karşılaştır.\nKriter: Suçlanan şahıs ile banka müşterisi aynı kişi mi?\nYanıt Formatı: { \"is_same_person\": true/false, \"confidence\": 0-100, \"reasoning\": \"...\" }",
-      "expectedImpact": "Adverse Media yanlış alarmlarında %60 azalma."
+      "problem": "İsim benzerliği nedeniyle masum müşteriler için yüzlerce alakasız mahkeme veya suç haberi uyarısı düşüyor; analistler saatlerce manuel haber ayıklıyor.",
+      "solution": "Haber metnindeki meslek, yaş ve şehir bağlamını müşterinin bankadaki kimlik verisiyle çapraz doğrulayan bağlamsal doğal dil işleme mimarisi.",
+      "methodologyAndStudy": "Saha Testi: 50.000 yerel savcılık ve mahkeme haberi üzerinde yapılan testlerde, bağlamsal çapraz kontrol sayesinde yanlış alarmların %60'ı analistin önüne hiç düşmeden elendi.",
+      "expectedImpact": "Adverse Media inceleme iş yükünde %60 azalma."
     }
   ],
   "authoritiesPulse": [
