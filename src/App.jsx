@@ -66,35 +66,35 @@ export default function App() {
   };
 
   const handleCopyMarkdown = () => {
-    const mdText = `# 🛡️ AML TEKNO RADAR - GÜNLÜK İSTİHBARAT BÜLTENİ
+    const mdText = `# AML TEKNO RADAR - GÜNLÜK İSTİHBARAT BÜLTENİ
 Tarih: ${report.date || '22 Eylül 2026'}
 Risk Skoru: ${report.threatMeter?.overallScore || 8.8}/10 (${report.threatMeter?.level || 'Yüksek'})
 
-## 🚨 GÜNÜN FLAŞ TEHDİDİ
+## GÜNÜN FLAŞ TEHDİDİ
 ${report.morningBrief?.flashAlert?.title || ''}
 ${report.morningBrief?.flashAlert?.description || ''}
 
-## 📋 YÖNETİCİ BRİFİNGİ
+## YÖNETİCİ BRİFİNGİ
 ${report.executiveSummary || ''}
 
-## 💬 AML DÜNYASINDA NELER KONUŞULUYOR?
+## AML DÜNYASINDA NELER KONUŞULUYOR?
 ${(report.amlTalks || []).map((t, i) => `
 ### #${i + 1} ${t.title} [${t.source}]
 - Özet: ${t.summary}
 - Çıkarım: ${t.keyInsight}
 `).join('\n')}
 
-## 💡 YENİ GELİŞMELER & ZEKİCE FİKİRLER
+## YENİ GELİŞMELER & FİKİRLER
 ${(report.newDevelopmentsAndIdeas || []).map((idea, i) => `
 ### #${i + 1} ${idea.title} [${idea.category}]
 - Problem: ${idea.problem}
 - Çözüm: ${idea.solution}
-- Kural / Prompt:
-${idea.promptOrLogic}
+- Saha Bulguları / Metodoloji:
+${idea.methodologyAndStudy || idea.promptOrLogic || ''}
 - Beklenen Etki: ${idea.expectedImpact}
 `).join('\n')}
 
-## 🏛️ OTORİTELERDE DURUM NASIL?
+## OTORİTELERDE DURUM NASIL?
 ${(report.authoritiesPulse || []).map((a, i) => `
 - [${a.authority}] ${a.title} (${a.date}): ${a.summary}
 `).join('\n')}
@@ -284,12 +284,12 @@ ${(report.authoritiesPulse || []).map((a, i) => `
         <div className="max-w-7xl mx-auto px-2 sm:px-4 border-t border-[#5c0f1c] pt-2 pb-1.5">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 w-full">
             {[
-              { id: 'talks', label: '💬 AML Dünyasında Konuşulanlar' },
-              { id: 'developments', label: '💡 Yeni Gelişmeler & Fikirler' },
-              { id: 'cdd_kyc', label: '🔍 Müşteri İnceleme (CDD / KYC)' },
-              { id: 'authorities', label: '🏛️ Otoritelerde Durum Nasıl?' },
-              { id: 'glossary', label: '📖 Günün AML Sözlüğü' },
-              { id: 'report', label: '📋 Danışman Bülteni' }
+              { id: 'talks', label: 'AML Dünyasında Konuşulanlar' },
+              { id: 'developments', label: 'Yeni Gelişmeler & Fikirler' },
+              { id: 'cdd_kyc', label: 'Müşteri İnceleme (CDD / KYC)' },
+              { id: 'authorities', label: 'Otoritelerde Durum Nasıl?' },
+              { id: 'glossary', label: 'Günün AML Sözlüğü' },
+              { id: 'report', label: 'Danışman Bülteni' }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -414,13 +414,12 @@ ${(report.authoritiesPulse || []).map((a, i) => `
               <div className="space-y-3 pt-0.5">
                 {/* İkili Flaş & Savunma Kartı */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch">
-                  {/* Sol Kart: 🔥 En Kritik Tehdit */}
+                  {/* Sol Kart: Günün Öncelikli Tehdit Analizi */}
                   <div className="bg-[#fff8f8] border border-rose-200/90 rounded-sm p-3.5 shadow-2xs flex flex-col justify-between gap-3 h-full">
                     <div>
                       <div className="border-b border-rose-100 pb-2">
-                        <div className="flex items-center gap-1.5 text-[#721c24] text-[11px] font-mono font-bold uppercase tracking-wider">
-                          <span>🚨</span>
-                          <span>Günün Öncelikli Tehdit Analizi</span>
+                        <div className="text-[#721c24] text-[11px] font-mono font-bold uppercase tracking-wider">
+                          Günün Öncelikli Tehdit Analizi
                         </div>
                         <h4 className="font-bold text-sm sm:text-base text-[#721c24] mt-1 leading-snug">
                           {report.morningBrief.mostDiscussed?.name || "FAST ve Anlık Ödemelerde Smurfing ile Fon Kaçırma Riski"}
@@ -431,17 +430,16 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                       </p>
                     </div>
                     <div className="text-[11px] text-slate-600 pt-2 border-t border-rose-100 leading-normal">
-                      <span className="font-semibold text-rose-900">Sektörel Etki &amp; Risk:</span> Perakende bankacılık ve VASP ekosisteminde kritik alarm seviyesinde değerlendirilen bu akış, kural motorlarının dinamik hesap bekleme sürelerini denetlemesini zorunlu kılıyor.
+                      Perakende bankacılık ve VASP ekosisteminde kritik alarm seviyesinde değerlendirilen bu akış, kural motorlarının dinamik hesap bekleme sürelerini denetlemesini zorunlu kılıyor.
                     </div>
                   </div>
 
-                  {/* Sağ Kart: ⭐ En Etkili Savunma Reçetesi */}
+                  {/* Sağ Kart: Öne Çıkan Savunma & Uygulama Reçetesi */}
                   <div className="bg-[#fefdf8] border border-amber-200/90 rounded-sm p-3.5 shadow-2xs flex flex-col justify-between gap-3 h-full">
                     <div>
                       <div className="border-b border-amber-100 pb-2">
-                        <div className="flex items-center gap-1.5 text-amber-900 text-[11px] font-mono font-bold uppercase tracking-wider">
-                          <span>⭐</span>
-                          <span>Öne Çıkan Savunma &amp; Operasyonel Çözüm</span>
+                        <div className="text-amber-900 text-[11px] font-mono font-bold uppercase tracking-wider">
+                          Öne Çıkan Savunma &amp; Uygulama Reçetesi
                         </div>
                         <h4 className="font-bold text-sm sm:text-base text-slate-900 mt-1 leading-snug">
                           {report.morningBrief.mostLoved?.name || "SAR ve Şüpheli İşlem Anlatılarında Otomatik Vaka Modellemesi"}
@@ -452,7 +450,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                       </p>
                     </div>
                     <div className="text-[11px] text-slate-600 pt-2 border-t border-amber-100 leading-normal">
-                      <span className="font-semibold text-amber-900">Operasyonel Verim:</span> Banka uyum masalarında pilot olarak uygulanan bu yaklaşım, analistlerin dosya inceleme yükünü yaklaşık %65 hafifleterek operasyonel kapanış sürelerini 3 kat hızlandırıyor.
+                      Banka uyum masalarında pilot olarak uygulanan bu yaklaşım, analistlerin dosya inceleme yükünü yaklaşık %65 hafifleterek operasyonel kapanış sürelerini 3 kat hızlandırıyor.
                     </div>
                   </div>
                 </div>
@@ -464,8 +462,8 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                       key={bIdx}
                       className="p-3 bg-[#f8fafc] border border-[#cbd5e1] rounded-sm hover:border-[#721c24] transition shadow-2xs flex flex-col justify-between h-full subgrid-card-morning group"
                     >
-                      <div className="flex items-center gap-2 pb-2 border-b border-[#e2e8f0] w-full">
-                        <span className="text-base shrink-0 select-none">{bullet.icon}</span>
+                      <div className="flex items-center gap-1.5 pb-2 border-b border-[#e2e8f0] w-full">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#721c24] shrink-0"></span>
                         <span className="font-mono text-[11px] font-bold text-slate-800 uppercase tracking-tight truncate">
                           {bullet.tag}
                         </span>
@@ -562,7 +560,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                 {report.twitterPulse.topExpertTakeaways && (
                   <div className="bg-slate-50 border border-slate-200 rounded-sm p-3 space-y-2">
                     <span className="text-[11px] font-mono font-bold text-slate-800 uppercase block">
-                      🔍 Otorite Dışı Bağımsız Uzman &amp; Dedektif Çıkarımları:
+                      Otorite Dışı Bağımsız Uzman &amp; Dedektif Çıkarımları:
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                       {report.twitterPulse.topExpertTakeaways.map((exp, idx) => (
@@ -592,9 +590,8 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                     <h3 className="font-bold text-sm text-slate-900 leading-snug">{talk.title}</h3>
                     <p className="text-xs text-slate-600 leading-relaxed font-sans">{talk.summary}</p>
                   </div>
-                  <div className="p-3 bg-amber-50/60 border border-amber-200 rounded text-xs space-y-1 mt-2">
-                    <strong className="text-amber-950 font-mono text-[10px] uppercase block">💡 Operasyonel Çıkarım &amp; Çözüm:</strong>
-                    <p className="text-amber-900 leading-relaxed">{talk.keyInsight}</p>
+                  <div className="p-3 bg-amber-50/50 border border-amber-200/80 rounded-sm text-xs mt-2">
+                    <p className="text-slate-800 leading-relaxed font-sans">{talk.keyInsight}</p>
                   </div>
                 </div>
               ))}
@@ -604,7 +601,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
 
 
         {/* ========================================================
-            TAB 2: 💡 AML DÜNYASINDA YENİ GELİŞMELER, FİKİRLER & SAHA ÇALIŞMALARI
+            TAB 2: AML DÜNYASINDA YENİ GELİŞMELER, FİKİRLER & SAHA ÇALIŞMALARI
             ======================================================== */}
         {activeTab === 'developments' && (
           <section className="space-y-4">
@@ -633,22 +630,20 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                       #{idx + 1} {idea.category} • {idea.badge}
                     </span>
                     <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
-                      ⚡ {idea.expectedImpact}
+                      {idea.expectedImpact}
                     </span>
                   </div>
                   <h3 className="font-bold text-sm text-slate-900">{idea.title}</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 bg-slate-50 border border-slate-200 rounded">
-                      <strong className="text-rose-900 block mb-1 font-mono uppercase text-[10px]">⚠️ Acı Noktası &amp; Problem:</strong>
-                      <p className="text-slate-700 leading-relaxed">{idea.problem}</p>
-                    </div>
-                    <div className="p-3 bg-slate-50 border border-slate-200 rounded">
-                      <strong className="text-emerald-900 block mb-1 font-mono uppercase text-[10px]">💡 Yenilikçi Çözüm &amp; Fikir:</strong>
-                      <p className="text-slate-700 leading-relaxed">{idea.solution}</p>
+                  <div className="p-3.5 bg-[#f8fafc] border border-slate-200 rounded-sm text-xs space-y-2.5">
+                    <p className="text-slate-700 leading-relaxed font-sans">
+                      {idea.problem}
+                    </p>
+                    <div className="pt-2.5 border-t border-slate-200 text-slate-800 leading-relaxed font-sans">
+                      {idea.solution}
                     </div>
                   </div>
                   {(idea.methodologyAndStudy || idea.promptOrLogic) && (
-                    <div className="bg-[#f8fafc] border border-slate-200 rounded p-3 text-xs space-y-1.5">
+                    <div className="bg-white border border-slate-200 rounded-sm p-3 text-xs space-y-1.5">
                       <strong className="text-[#721c24] font-mono text-[11px] uppercase block flex items-center gap-1.5">
                         <BookMarked className="w-3.5 h-3.5 text-[#721c24]" />
                         Metodoloji &amp; Saha Çalışması Bulguları:
@@ -665,7 +660,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
         )}
 
         {/* ========================================================
-            TAB 3: 🔍 MÜŞTERİ İNCELEME SÜREÇLERİNE DAİR TEKNOLOJİK GELİŞMELER VE FİKİRLER
+            TAB 3: MÜŞTERİ İNCELEME SÜREÇLERİNE DAİR TEKNOLOJİK GELİŞMELER VE FİKİRLER
             ======================================================== */}
         {activeTab === 'cdd_kyc' && (
           <section className="space-y-4">
@@ -694,22 +689,20 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                       #{idx + 1} {kyc.category} • {kyc.badge}
                     </span>
                     <span className="text-[11px] font-mono text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 font-medium">
-                      ⚡ {kyc.expectedImpact}
+                      {kyc.expectedImpact}
                     </span>
                   </div>
                   <h3 className="font-bold text-sm text-slate-900">{kyc.title}</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 bg-slate-50 border border-slate-200 rounded">
-                      <strong className="text-rose-900 block mb-1 font-mono uppercase text-[10px]">⚠️ Kimlik &amp; Kabul Açığı:</strong>
-                      <p className="text-slate-700 leading-relaxed">{kyc.problem}</p>
-                    </div>
-                    <div className="p-3 bg-slate-50 border border-slate-200 rounded">
-                      <strong className="text-emerald-900 block mb-1 font-mono uppercase text-[10px]">💡 Yeni Nesil Teknoloji &amp; Çözüm:</strong>
-                      <p className="text-slate-700 leading-relaxed">{kyc.solution}</p>
+                  <div className="p-3.5 bg-[#f8fafc] border border-slate-200 rounded-sm text-xs space-y-2.5">
+                    <p className="text-slate-700 leading-relaxed font-sans">
+                      {kyc.problem}
+                    </p>
+                    <div className="pt-2.5 border-t border-slate-200 text-slate-800 leading-relaxed font-sans">
+                      {kyc.solution}
                     </div>
                   </div>
                   {(kyc.methodologyAndStudy || kyc.promptOrLogic) && (
-                    <div className="bg-[#f8fafc] border border-slate-200 rounded p-3 text-xs space-y-1.5">
+                    <div className="bg-white border border-slate-200 rounded-sm p-3 text-xs space-y-1.5">
                       <strong className="text-[#721c24] font-mono text-[11px] uppercase block flex items-center gap-1.5">
                         <BookMarked className="w-3.5 h-3.5 text-[#721c24]" />
                         Teknik Mimari &amp; Uygulama Modeli:
@@ -726,7 +719,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
         )}
 
         {/* ========================================================
-            TAB 4: 🏛️ OTORİTELERDE DURUM NASIL? (FATF, MASAK, OFAC, FinCEN, EBA)
+            TAB 4: OTORİTELERDE DURUM NASIL? (FATF, MASAK, OFAC, FinCEN, EBA)
             ======================================================== */}
         {activeTab === 'authorities' && (
           <section className="space-y-4">
@@ -771,7 +764,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                   <div className="space-y-2">
                     <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-2">
                       <span className="font-mono font-bold text-xs text-[#721c24] bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
-                        🏛️ {auth.authority}
+                        {auth.authority}
                       </span>
                       <span className="text-[10px] font-mono text-slate-500">
                         {auth.country} • {auth.date}
@@ -906,7 +899,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
         )}
 
         {/* ========================================================
-            TAB 6: 📋 DANIŞMAN BÜLTENİ
+            TAB 6: DANIŞMAN BÜLTENİ
             ======================================================== */}
         {activeTab === 'report' && (
           <section className="bg-white border border-[#cbd5e1] rounded-sm p-4 sm:p-6 shadow-xs space-y-5">
@@ -931,14 +924,14 @@ ${(report.authoritiesPulse || []).map((a, i) => `
             <div className="space-y-4 text-xs text-slate-700 leading-relaxed font-normal">
               <div className="p-3.5 bg-rose-50 border-l-4 border-l-[#721c24] rounded-r">
                 <span className="font-mono font-bold text-rose-950 uppercase block mb-1">
-                  🚨 GÜNÜN FLAŞ UYARISI:
+                  Günün Flaş Uyarısı:
                 </span>
                 <p className="text-rose-900 font-semibold">{report.morningBrief?.flashAlert?.title}</p>
                 <p className="text-rose-800 mt-1">{report.morningBrief?.flashAlert?.description}</p>
               </div>
 
               <div className="space-y-2">
-                <h3 className="font-bold font-mono text-slate-900 uppercase text-xs">📋 Yönetici Brifingi:</h3>
+                <h3 className="font-bold font-mono text-slate-900 uppercase text-xs">Yönetici Brifingi:</h3>
                 <p className="whitespace-pre-line text-slate-800 leading-relaxed">{report.executiveSummary}</p>
               </div>
             </div>

@@ -119,7 +119,7 @@ export default function ActionableIdeasSheet({ ideas = [] }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
                   <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/80">
                     <span className="text-[11px] font-mono uppercase font-bold text-rose-400 block mb-1">
-                      ⚠️ Operasyonel Acı Noktası (Problem)
+                      Mevcut Zorluk &amp; Problem
                     </span>
                     <p className="text-xs text-slate-300 leading-relaxed">
                       {idea.problem}
@@ -127,7 +127,7 @@ export default function ActionableIdeasSheet({ ideas = [] }) {
                   </div>
                   <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/80">
                     <span className="text-[11px] font-mono uppercase font-bold text-emerald-400 block mb-1">
-                      💡 Zekice Çözüm Yaklaşımı
+                      Önerilen Çözüm Modeli
                     </span>
                     <p className="text-xs text-slate-300 leading-relaxed">
                       {idea.solution}

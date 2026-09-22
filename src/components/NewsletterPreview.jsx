@@ -12,39 +12,39 @@ export default function NewsletterPreview({ report }) {
   const typologies = report?.threatAndTypologyMatrix || [];
 
   const generateMarkdown = () => {
-    return `# 🛡️ AML TEKNO RADAR - GÜNLÜK İSTİHBARAT BÜLTENİ
+    return `# AML TEKNO RADAR - GÜNLÜK İSTİHBARAT BÜLTENİ
 **Tarih:** ${dateStr}
 **Tehdit Skoru:** ${report?.threatMeter?.overallScore || 8.8}/10 (${report?.threatMeter?.level || "Yüksek"})
 
 ---
 
-## 🚨 GÜNÜN FLAŞ TEHDİDİ
+## GÜNÜN FLAŞ TEHDİDİ
 **${flash.title}**
-*Etiket:* ${flash.tag || "Kripto & FAST"}
+*Kategori:* ${flash.tag || "Kripto & FAST"}
 ${flash.description}
 
 ---
 
-## 📋 YÖNETİCİ BRİFİNGİ
+## YÖNETİCİ BRİFİNGİ
 ${report?.executiveSummary}
 
 ---
 
-## 💡 AML EKİPLERİ İÇİN ZEKİCE FİKİRLER & REÇETELER
+## AML EKİPLERİ İÇİN YENİ FİKİRLER & GELİŞMELER
 ${ideas.map((idea, i) => `
 ### #${i + 1} ${idea.title} [${idea.category}]
 - **Problem:** ${idea.problem}
-- **Zekice Çözüm:** ${idea.solution}
-- **Kural / Prompt:**
+- **Önerilen Çözüm:** ${idea.solution}
+- **Metodoloji / Kural:**
 \`\`\`
-${idea.promptOrLogic}
+${idea.promptOrLogic || idea.methodologyAndStudy || ''}
 \`\`\`
 - **Beklenen Etki:** ${idea.expectedImpact}
 `).join("\n")}
 
 ---
 
-## ⚡ YÜKSELEN AKLAMA TİPOLOJİLERİ
+## YÜKSELEN AKLAMA TİPOLOJİLERİ
 | Tipoloji | Risk Skoru | Trend | Hedef Sektör |
 | :--- | :--- | :--- | :--- |
 ${typologies.map(t => `| ${t.name} | ${t.riskScore}/10 | ${t.delta} | ${t.targetSector} |`).join("\n")}
@@ -145,7 +145,7 @@ ${typologies.map(t => `| ${t.name} | ${t.riskScore}/10 | ${t.delta} | ${t.target
         {/* Yönetici Brifingi */}
         <div className="space-y-2">
           <h3 className="text-sm font-bold font-mono text-sky-400 uppercase tracking-wider">
-            📋 Yönetici Brifingi
+            Yönetici Brifingi
           </h3>
           <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line">
             {report?.executiveSummary}
@@ -155,7 +155,7 @@ ${typologies.map(t => `| ${t.name} | ${t.riskScore}/10 | ${t.delta} | ${t.target
         {/* Zekice Fikirler */}
         <div className="space-y-4 pt-4 border-t border-slate-800">
           <h3 className="text-sm font-bold font-mono text-emerald-400 uppercase tracking-wider">
-            💡 AML Ekipleri İçin Zekice Fikirler & Reçeteler
+            Yeni Gelişmeler &amp; Fikirler
           </h3>
           {ideas.map((idea, idx) => (
             <div key={idx} className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
@@ -166,7 +166,7 @@ ${typologies.map(t => `| ${t.name} | ${t.riskScore}/10 | ${t.delta} | ${t.target
                 {idea.title}
               </h4>
               <p className="text-xs text-slate-300 mb-2">
-                <strong>Acı Noktası:</strong> {idea.problem}
+                <strong>Zorluk:</strong> {idea.problem}
               </p>
               <p className="text-xs text-slate-300 mb-3">
                 <strong>Çözüm:</strong> {idea.solution}
@@ -177,7 +177,7 @@ ${typologies.map(t => `| ${t.name} | ${t.riskScore}/10 | ${t.delta} | ${t.target
                 </div>
               )}
               <div className="text-[11px] font-mono text-slate-400">
-                ⚡ Beklenen Etki: {idea.expectedImpact}
+                Beklenen Etki: {idea.expectedImpact}
               </div>
             </div>
           ))}
@@ -186,7 +186,7 @@ ${typologies.map(t => `| ${t.name} | ${t.riskScore}/10 | ${t.delta} | ${t.target
         {/* Tipoloji Tablosu */}
         <div className="space-y-3 pt-4 border-t border-slate-800">
           <h3 className="text-sm font-bold font-mono text-amber-400 uppercase tracking-wider">
-            ⚡ Yükselen Aklama Tipolojileri
+            Yükselen Aklama Tipolojileri
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
