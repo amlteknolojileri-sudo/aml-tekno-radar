@@ -42,16 +42,16 @@
       "description": "DeFi köprülerinden kaçırılan fonlar 120'den fazla öğrenci ve ev hanımı kurye hesabına saniyeler içinde dağıtılıyor."
     },
     "mostDiscussed": {
-      "name": "FAST Smurfing & Anlık Fon Kaçırma",
+      "name": "FAST ve Anlık Ödemelerde Smurfing ile Fon Kaçırma Dinamikleri",
       "hypeScore": 9.8,
       "sentimentScore": 38,
-      "description": "Anlık ödeme altyapılarında hesap yaşını ve fon kalış süresini (dwell time) kontrol etmeyen kural motorları kurye hesapları yakalayamıyor; analistler günde yüzlerce kaçırılan işlemi kapatmaktan yakınıyor."
+      "description": "Anlık ödeme altyapılarında hesap yaşını ve fon kalış süresini (dwell time) denetlemeyen geleneksel kural motorları kurye hesapları yakalamakta yetersiz kalıyor; analistler saniyeler içinde onlarca hesaba dağıtılan fonlar karşısında günde yüzlerce kaçırılan işlemi kapatmaktan ve yüksek operasyonel risk baskısından yakınıyor."
     },
     "mostLoved": {
-      "name": "SAR/STR Anlatı Otomasyonu",
+      "name": "SAR ve Şüpheli İşlem Anlatılarında Otomatik Vaka Modellemesi",
       "hypeScore": 9.6,
       "sentimentScore": 95,
-      "description": "Analistin 45 dakikasını 12 dakikaya indirip doğrudan MASAK/FinCEN standartlarında 5 bölümlü vaka gerekçesi hazırlayan pilot çalışmalar hız kazanıyor."
+      "description": "Analistin dosya başına harcadığı 45 dakikalık süreyi 12 dakikaya indirip doğrudan MASAK ve uluslararası standartlarda 5 bölümlü resmi vaka gerekçesi hazırlayan pilot otomasyon çalışmaları ekiplerin operasyonel hızını katlıyor."
     },
     "bullets": [
       {

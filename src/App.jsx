@@ -415,56 +415,44 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                 {/* İkili Flaş & Savunma Kartı */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch">
                   {/* Sol Kart: 🔥 En Kritik Tehdit */}
-                  <div className="bg-rose-50/80 border border-rose-300/80 rounded p-3 shadow-2xs flex flex-col justify-between gap-2.5 h-full">
+                  <div className="bg-[#fff8f8] border border-rose-200/90 rounded-sm p-3.5 shadow-2xs flex flex-col justify-between gap-3 h-full">
                     <div>
-                      <div className="flex items-center justify-between gap-2 flex-nowrap pb-1.5 border-b border-rose-200/70 min-w-0">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-sm shrink-0">🚨</span>
-                          <span className="text-[11px] font-mono font-bold text-rose-950 uppercase tracking-tight shrink-0">
-                            Günün En Sıcak Tehdidi:
-                          </span>
-                          <span className="font-mono text-xs sm:text-sm font-black text-rose-900 bg-rose-100 px-2 py-0.5 rounded border border-rose-300 truncate min-w-0">
-                            {report.morningBrief.mostDiscussed?.name || "FAST Smurfing"}
-                          </span>
+                      <div className="border-b border-rose-100 pb-2">
+                        <div className="flex items-center gap-1.5 text-[#721c24] text-[11px] font-mono font-bold uppercase tracking-wider">
+                          <span>🚨</span>
+                          <span>Günün Öncelikli Tehdit Analizi</span>
                         </div>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#721c24] text-white font-black shadow-2xs shrink-0 whitespace-nowrap">
-                          RİSK: {report.morningBrief.mostDiscussed?.hypeScore || 9.8}/10
-                        </span>
+                        <h4 className="font-bold text-sm sm:text-base text-[#721c24] mt-1 leading-snug">
+                          {report.morningBrief.mostDiscussed?.name || "FAST ve Anlık Ödemelerde Smurfing ile Fon Kaçırma Riski"}
+                        </h4>
                       </div>
-                      <p className="text-xs text-rose-900 mt-2 leading-relaxed">
+                      <p className="text-xs text-slate-700 mt-2.5 leading-relaxed">
                         {report.morningBrief.mostDiscussed?.description}
                       </p>
                     </div>
-                    <div className="text-[10px] font-mono text-rose-800/80 pt-1.5 flex items-center justify-between border-t border-rose-200/50">
-                      <span>Etki Alanı: Perakende Bankacılık &amp; VASP</span>
-                      <span>Öncelik: Kritik</span>
+                    <div className="text-[11px] text-slate-600 pt-2 border-t border-rose-100 leading-normal">
+                      <span className="font-semibold text-rose-900">Sektörel Etki &amp; Risk:</span> Perakende bankacılık ve VASP ekosisteminde kritik alarm seviyesinde değerlendirilen bu akış, kural motorlarının dinamik hesap bekleme sürelerini denetlemesini zorunlu kılıyor.
                     </div>
                   </div>
 
                   {/* Sağ Kart: ⭐ En Etkili Savunma Reçetesi */}
-                  <div className="bg-amber-50/80 border border-amber-300/80 rounded p-3 shadow-2xs flex flex-col justify-between gap-2.5 h-full">
+                  <div className="bg-[#fefdf8] border border-amber-200/90 rounded-sm p-3.5 shadow-2xs flex flex-col justify-between gap-3 h-full">
                     <div>
-                      <div className="flex items-center justify-between gap-2 flex-nowrap pb-1.5 border-b border-amber-200/70 min-w-0">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-sm shrink-0">⭐</span>
-                          <span className="text-[11px] font-mono font-bold text-amber-950 uppercase tracking-tight shrink-0">
-                            Öne Çıkan Savunma &amp; Çözüm:
-                          </span>
-                          <span className="font-mono text-xs sm:text-sm font-black text-amber-900 bg-amber-100/90 px-2 py-0.5 rounded border border-amber-300 truncate min-w-0">
-                            {report.morningBrief.mostLoved?.name || "DeepSeek SAR Otomasyonu"}
-                          </span>
+                      <div className="border-b border-amber-100 pb-2">
+                        <div className="flex items-center gap-1.5 text-amber-900 text-[11px] font-mono font-bold uppercase tracking-wider">
+                          <span>⭐</span>
+                          <span>Öne Çıkan Savunma &amp; Operasyonel Çözüm</span>
                         </div>
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-600 text-white font-black shadow-2xs shrink-0 whitespace-nowrap">
-                          VERİM: {report.morningBrief.mostLoved?.hypeScore || 9.6}/10
-                        </span>
+                        <h4 className="font-bold text-sm sm:text-base text-slate-900 mt-1 leading-snug">
+                          {report.morningBrief.mostLoved?.name || "SAR ve Şüpheli İşlem Anlatılarında Otomatik Vaka Modellemesi"}
+                        </h4>
                       </div>
-                      <p className="text-xs text-amber-900 mt-2 leading-relaxed">
+                      <p className="text-xs text-slate-700 mt-2.5 leading-relaxed">
                         {report.morningBrief.mostLoved?.description}
                       </p>
                     </div>
-                    <div className="text-[10px] font-mono text-amber-800/80 pt-1.5 flex items-center justify-between border-t border-amber-200/50">
-                      <span>Uygulama: Banka Uyum Masası</span>
-                      <span>Zaman Tasarrufu: %65</span>
+                    <div className="text-[11px] text-slate-600 pt-2 border-t border-amber-100 leading-normal">
+                      <span className="font-semibold text-amber-900">Operasyonel Verim:</span> Banka uyum masalarında pilot olarak uygulanan bu yaklaşım, analistlerin dosya inceleme yükünü yaklaşık %65 hafifleterek operasyonel kapanış sürelerini 3 kat hızlandırıyor.
                     </div>
                   </div>
                 </div>
