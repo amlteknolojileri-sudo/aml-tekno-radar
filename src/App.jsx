@@ -216,7 +216,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                 </span>
                 <div>
                   <span className="bg-[#4a0b16] text-white px-1.5 py-0.2 rounded font-semibold text-[10.5px] border border-rose-300/20 whitespace-nowrap text-center inline-block">
-                    DeepSeek v3 (İstihbarat)
+                    DeepSeek v4.1 Flash
                   </span>
                 </div>
                 <span className="text-rose-300/40">|</span>
@@ -233,7 +233,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
                 </span>
                 <div className="border-t border-rose-300/20 pt-1">
                   <span className="bg-[#4a0b16] text-white px-1.5 py-0.2 rounded font-semibold text-[10.5px] border border-rose-300/20 whitespace-nowrap text-center inline-block">
-                    DeepSeek v3 (Sabah Sentezi)
+                    DeepSeek v4.1 Flash
                   </span>
                 </div>
                 <span className="text-rose-300/40 border-t border-rose-300/20 pt-1">|</span>
@@ -326,12 +326,12 @@ ${(report.authoritiesPulse || []).map((a, i) => `
             </div>
             <div className="p-4 space-y-3">
               <div className="bg-rose-50 border border-rose-200 rounded p-3 space-y-1">
-                <span className="text-[11px] font-bold text-rose-950 block">1. LLM (İstihbarat &amp; Çıkarım):</span>
-                <p className="text-slate-800">DeepSeek v3 • Toplam: {p1TotalK}k token (Girdi: {p1PromptK}k, Düşünce: {p1ReasoningK}k)</p>
+                <span className="text-[11px] font-bold text-rose-950 block">1. LLM (DeepSeek v4.1 Flash):</span>
+                <p className="text-slate-800">Toplam: {p1TotalK}k token (Girdi: {p1PromptK}k, Düşünce: {p1ReasoningK}k)</p>
               </div>
               <div className="bg-cyan-50 border border-cyan-200 rounded p-3 space-y-1">
-                <span className="text-[11px] font-bold text-cyan-950 block">2. LLM (Sabah Sentezi &amp; Brifing):</span>
-                <p className="text-slate-800">DeepSeek v3 • Toplam: {p2TotalK}k token (Girdi: {p2PromptK}k, Düşünce: {p2ReasoningK}k)</p>
+                <span className="text-[11px] font-bold text-cyan-950 block">2. LLM (DeepSeek v4.1 Flash):</span>
+                <p className="text-slate-800">Toplam: {p2TotalK}k token (Girdi: {p2PromptK}k, Düşünce: {p2ReasoningK}k)</p>
               </div>
               <div className="bg-slate-50 border border-slate-200 rounded p-3 space-y-1">
                 <span className="text-[11px] font-bold text-slate-800 block">Taranan Veri Havuzu:</span>
@@ -495,21 +495,93 @@ ${(report.authoritiesPulse || []).map((a, i) => `
         {activeTab === 'talks' && (
           <section className="space-y-4">
             <div className="bg-white border border-[#cbd5e1] rounded-sm p-4 shadow-xs">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200 flex-wrap gap-2">
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-5 h-5 text-[#721c24]" />
                   <h2 className="font-bold text-sm sm:text-base text-slate-900 font-mono uppercase">
-                    AML Dünyasında Neler Konuşuluyor? (Topluluk &amp; Saha Nabzı)
+                    AML Dünyasında Neler Konuşuluyor? (Saha &amp; Topluluk Nabzı)
                   </h2>
                 </div>
-                <span className="text-xs font-mono text-slate-500">
-                  r/AMLCompliance, X ve Adli İstihbarat Sinyalleri
+                <span className="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                  r/AMLCompliance, Bağımsız X Dedektifleri &amp; Saha İstihbaratı
                 </span>
               </div>
               <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Uyum görevlilerinin, MASAK/OFAC analistlerinin ve on-chain dedektiflerinin son 24 saat içinde en hararetle tartıştığı pratik sorunlar ve çözüm önerileri.
+                Uyum görevlilerinin, MASAK/OFAC analistlerinin ve bağımsız on-chain dedektiflerinin son 24 saat içinde en hararetle tartıştığı pratik sorunlar, duygu analizi ve çözüm önerileri.
               </p>
             </div>
+
+            {/* 🐦 TWITTER / X ÖZEL TARTIM & DUYGU ANALİZİ (OTORİTE DIŞI UZMANLAR) */}
+            {report.twitterPulse && (
+              <div className="bg-gradient-to-br from-slate-900 via-[#1e1b24] to-[#2d0e15] border border-rose-300/30 rounded-sm p-4 text-white shadow-sm space-y-4 font-sans">
+                <div className="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-white/10">
+                  <div className="flex items-center gap-2">
+                    <span className="bg-rose-500/20 text-rose-300 border border-rose-400/30 px-2 py-0.5 rounded font-mono font-bold text-xs uppercase flex items-center gap-1.5">
+                      <Flame className="w-3.5 h-3.5 text-rose-400" />
+                      Twitter / X AML Gündemi &amp; Tartım
+                    </span>
+                    <span className="text-xs text-slate-300 font-mono hidden sm:inline">
+                      (Resmi Otoriteler Hariç: Bağımsız Analistler, Dedektifler &amp; Gazeteciler)
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono text-rose-200/80 bg-white/5 border border-white/10 px-2 py-0.5 rounded">
+                    {report.twitterPulse.totalAnalyzed || 45} Uzman Paylaşımı Tartıldı
+                  </span>
+                </div>
+
+                {/* Duygu Tartım Çubuğu (Sentiment Bar) */}
+                <div className="space-y-1.5 bg-black/30 border border-white/10 p-3 rounded">
+                  <div className="flex items-center justify-between text-xs font-mono text-slate-300">
+                    <span className="font-semibold text-rose-200">Topluluk Duygu Dağılımı:</span>
+                    <div className="flex items-center gap-3 text-[11px]">
+                      <span className="text-rose-400 flex items-center gap-1">● %{report.twitterPulse.sentimentDistribution?.critical || 58} Kritik / Endişeli</span>
+                      <span className="text-emerald-400 flex items-center gap-1">● %{report.twitterPulse.sentimentDistribution?.solutionOriented || 28} Çözüm Odaklı</span>
+                      <span className="text-sky-300 flex items-center gap-1">● %{report.twitterPulse.sentimentDistribution?.informative || 14} Bilgilendirici</span>
+                    </div>
+                  </div>
+                  <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden flex">
+                    <div style={{ width: `${report.twitterPulse.sentimentDistribution?.critical || 58}%` }} className="bg-rose-500 h-full" title="Kritik / Endişeli" />
+                    <div style={{ width: `${report.twitterPulse.sentimentDistribution?.solutionOriented || 28}%` }} className="bg-emerald-500 h-full" title="Çözüm Odaklı" />
+                    <div style={{ width: `${report.twitterPulse.sentimentDistribution?.informative || 14}%` }} className="bg-sky-400 h-full" title="Bilgilendirici" />
+                  </div>
+                </div>
+
+                {/* Twitter'da Öne Çıkan Başlıklar & Ağırlıkları */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {(report.twitterPulse.dominantTopics || []).map((t, idx) => (
+                    <div key={idx} className="bg-white/5 border border-white/10 rounded p-3 space-y-1.5 hover:bg-white/10 transition">
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[11px] font-bold text-amber-300">
+                          #{idx + 1} Ağırlık: %{t.sharePercentage}
+                        </span>
+                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 border border-rose-400/20">
+                          {t.sentiment}
+                        </span>
+                      </div>
+                      <h4 className="font-bold text-xs text-white leading-snug">{t.topic}</h4>
+                      <p className="text-[11px] text-slate-300 leading-relaxed font-sans">{t.summary}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bağımsız Uzman / Dedektif Çıkarımları */}
+                {report.twitterPulse.topExpertTakeaways && (
+                  <div className="bg-black/20 border border-white/10 rounded p-3 space-y-2">
+                    <span className="text-[11px] font-mono font-bold text-rose-300 uppercase block">
+                      🔍 Otorite Dışı Bağımsız Uzman &amp; Dedektif Çıkarımları:
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                      {report.twitterPulse.topExpertTakeaways.map((exp, idx) => (
+                        <div key={idx} className="bg-white/5 border border-white/10 rounded p-2 text-xs space-y-1">
+                          <strong className="text-amber-300 font-mono block text-[11px]">{exp.expert}</strong>
+                          <p className="text-slate-300 text-[11px] leading-relaxed">{exp.highlight}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {(report.amlTalks || []).map((talk, idx) => (
@@ -889,7 +961,7 @@ ${(report.authoritiesPulse || []).map((a, i) => `
           <span>DURUM: AKTİF İSTİHBARAT</span>
           <span className="hidden sm:inline">KÜRESEL RİSK: {report.threatMeter?.overallScore || 8.8}/10</span>
           <span className="hidden md:inline text-slate-500">
-            | MOTOR: <strong className="text-slate-800">DeepSeek v3 (Çift LLM)</strong>
+            | MOTOR: <strong className="text-slate-800">DeepSeek v4.1 Flash</strong>
           </span>
           <span className="hidden md:inline text-slate-500">
             | SÜRE: <strong className="text-slate-800">{report.durationSeconds || 69}s</strong>

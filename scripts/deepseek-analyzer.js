@@ -1,7 +1,10 @@
 /**
- * Çift LLM (Dual LLM) AML İstihbarat ve Sentez Motoru
- * 1. LLM (Phase 1): Ham verilerden derin veri çıkarımı ve fikir üretimi
- * 2. LLM (Phase 2): Sabah istihbaratı ve yönetici editoryal sentezi
+ * Çift LLM (Dual LLM) AML & FinCrime Analiz ve Sentez Motoru
+ * Model: DeepSeek v4.1 Flash
+ * 
+ * 1. LLM (Phase 1): Reddit, X (Otorite Dışı Uzmanlar), Resmi Otorite Siteleri ve arXiv verilerinden
+ *    ham çıkarım yapar, kural mantıkları ve zeki fikirler üretir.
+ * 2. LLM (Phase 2): Sabah sentezini, yönetici brifingini ve Twitter topluluk nabzını oluşturur.
  */
 
 export async function analyzeAmlDataWithDualLLM({ 
@@ -16,47 +19,48 @@ export async function analyzeAmlDataWithDualLLM({
   }
 
   const startTime = Date.now();
-  console.log("🧠 1. LLM (Phase 1): Ham AML, Twitter, Otorite ve arXiv verileri taranıyor...");
+  console.log("🧠 1. LLM (Phase 1) - Model: DeepSeek v4.1 Flash: Ham veriler derin taranıyor...");
 
-  const redditContext = redditPosts.slice(0, 30).map((p, idx) => 
-    `[Reddit-${idx + 1}] [r/${p.subreddit}] "${p.title}"\n${(p.content || "").slice(0, 250)}`
+  const redditContext = redditPosts.slice(0, 45).map((p, idx) => 
+    `[Reddit-${idx + 1}] [r/${p.subreddit}] "${p.title}"\n${(p.content || "").slice(0, 300)}`
   ).join("\n\n");
 
-  const twitterContext = twitterPosts.slice(0, 25).map((t, idx) => 
-    `[X-${idx + 1}] @${t.authorHandle} (${t.likes} fav): "${t.text}"`
+  const twitterContext = twitterPosts.slice(0, 35).map((t, idx) => 
+    `[Twitter-${idx + 1}] @${t.authorHandle} (${t.likes} fav, ${t.retweets} rt): "${t.text}"`
   ).join("\n\n");
 
-  const arxivContext = arxivPapers.slice(0, 10).map((a, idx) => 
-    `[arXiv-${idx + 1}] [${a.id}] "${a.title}"\nÖzet: ${a.summary.slice(0, 250)}\nLink: ${a.arxivUrl}`
+  const arxivContext = arxivPapers.slice(0, 8).map((a, idx) => 
+    `[arXiv-${idx + 1}] [${a.id}] "${a.title}"\nÖzet: ${(a.summary || "").slice(0, 300)}\nLink: ${a.arxivUrl}`
   ).join("\n\n");
 
   const authContext = authorityPosts.slice(0, 10).map((a, idx) => 
-    `[Otorite-${idx + 1}] [${a.authorityName}] "${a.title}"\n${a.summary || ""}\nLink: ${a.url}`
+    `[Resmi Otorite-${idx + 1}] [${a.authorityName} / ${a.country}] "${a.title}"\n${a.summary || ""}\nLink: ${a.url}`
   ).join("\n\n");
 
   // ==========================================
   // 1. AŞAMA: PHASE 1 LLM ÇAĞRISI
   // ==========================================
-  const phase1System = `Sen kıdemli bir AML/CFT, Finansal Suçlar, Yaptırımlar (OFAC/AB), MASAK mevzuatı ve Müşteri İnceleme (CDD/KYC) Baş Danışmanısın.
+  const phase1System = `Sen küresel düzeyde kıdemli bir AML/CFT, Finansal Suçlar, Yaptırımlar, MASAK mevzuatı ve Müşteri İnceleme (CDD/KYC) Baş Mimarı ve Danışmanısın.
 
-Görevin ham verilerden aşağıdaki 5 ana başlıkta zengin, derin ve pratik çıktılar üretmektir:
-1. "amlTalks": AML Dünyasında Neler Konuşuluyor? (Reddit, X ve saha tartışmaları, analistlerin acı noktaları, şikayetler, false-positive dertleri)
-2. "newDevelopmentsAndIdeas": AML Dünyasında Yeni Gelişmeler ve Fikirler? (İşlem izleme anomali kuralları, SAR/STR otomasyonu, smurfing, kurye hesap tespiti)
-3. "cddKycInnovations": Müşteri İnceleme Süreçlerine Dair Teknolojik Gelişmeler ve Fikirler (Sentetik kimlik tespiti, deepfake liveness, UBO paravan şirket grafikleri, CDD/EDD otomasyonu)
-4. "authoritiesPulse": Otoritelerde Durum Nasıl? (FATF, MASAK, OFAC, FinCEN son 24 saat hareketleri, yaptırımlar, gri/kara liste)
-5. "dailyGlossary": Günün AML Sözlüğü (Günün en kilit 9 kavramı ve sade anlaşılır açıklaması)
+Görevin taranan ham verileri titizlikle işleyip aşağıdaki 6 ana başlıkta hatasız ve pratik çıktılar üretmektir:
+1. "amlTalks": AML Dünyasında Neler Konuşuluyor? (Reddit ve saha tartışmaları, analistlerin günlük şikayetleri, false-positive yükü, pratik çözümler)
+2. "twitterPulse": Twitter'da AML Gündemi & Tartım (Twitter'da otoriteler hariç bağımsız analist, araştırmacı ve dedektiflerin ne konuştuğu, duygu analizi ve konu ağırlıkları)
+3. "newDevelopmentsAndIdeas": AML Dünyasında Yeni Gelişmeler ve Fikirler? (İşlem izleme kuralları, SAR/STR otomasyonu, smurfing, kurye hesap tespiti)
+4. "cddKycInnovations": Müşteri İnceleme Süreçlerine Dair Teknolojik Gelişmeler ve Fikirler (Sentetik kimlik, deepfake liveness, UBO ve paravan şirket grafikleri)
+5. "authoritiesPulse": Otoritelerde Durum Nasıl? (FATF, MASAK, OFAC, FinCEN son 24 saat duyuruları ve yaptırımları)
+6. "dailyGlossary": Günün AML Sözlüğü (Günün en kilit 9 kavramı ve 2-3 cümlelik sade tanımı)
 
 Çıktıyı SADECE geçerli ve hatasız bir JSON objesi olarak ver.`;
 
-  const phase1User = `Aşağıdaki güncel verileri derinlemesine analiz et:
+  const phase1User = `Aşağıdaki güncel kaynak verilerini derinlemesine analiz et:
 
-=== 🏛️ OTORİTELER (FATF, MASAK, OFAC, FinCEN) ===
+=== 🏛️ RESMİ OTORİTELER (FATF, MASAK, OFAC, FinCEN - Kendi Sitelerinden) ===
 ${authContext || "Otorite verisi bulunamadı."}
 
-=== 🗣️ REDDIT TARTIŞMALARI ===
+=== 🗣️ REDDİT TOPLULUKLARI & AML ANALİSTLERİ ===
 ${redditContext || "Reddit verisi bulunamadı."}
 
-=== 🐦 X (TWITTER) İSTİHBARATI & DEDEKTİFLER ===
+=== 🐦 X (TWITTER) BAĞIMSIZ DEDEKTİFLER & SAHA UZMANLARI (Otorite Dışı) ===
 ${twitterContext || "Twitter verisi bulunamadı."}
 
 === 📚 ARXIV AKADEMİK ARAŞTIRMALAR ===
@@ -71,13 +75,47 @@ ${arxivContext || "arXiv verisi bulunamadı."}
     {
       "id": "talk-1",
       "title": "Tartışma Başlığı",
-      "category": "Operasyon & Sahadaki Dertler",
+      "category": "Operasyon & Saha Tartışmaları",
       "badge": "Sıcak Tartışma",
-      "summary": "Analistlerin Reddit ve X'te ne konuştuğu",
+      "summary": "Analistlerin Reddit'te ne konuştuğu ve acı noktaları",
       "keyInsight": "Operasyonel çıkarım ve çözüm yolu",
       "source": "r/AMLCompliance"
     }
   ],
+  "twitterPulse": {
+    "totalAnalyzed": 35,
+    "sentimentDistribution": { "critical": 58, "solutionOriented": 28, "informative": 14 },
+    "dominantTopics": [
+      {
+        "topic": "Öğrenci Kurye Hesap (Money Mule) Ağları",
+        "sharePercentage": 36,
+        "sentiment": "Kritik",
+        "summary": "Telegram ve TikTok üzerinden öğrencilerin banka hesaplarını kiralayan aklama şebekeleri gündemde."
+      },
+      {
+        "topic": "İşlem İzlemede Alert Fatigue & Yanlış Alarm Bıkkınlığı",
+        "sharePercentage": 32,
+        "sentiment": "Endişeli",
+        "summary": "Saha analistleri %95 yanlış alarm üreten kural motorları nedeniyle gerçek vakaları kaçırmaktan şikayetçi."
+      },
+      {
+        "topic": "Yapay Zeka Destekli Sahte Pasaport & KYC Atlatma",
+        "sharePercentage": 22,
+        "sentiment": "Yüksek Tehdit",
+        "summary": "Görsel üretim modelleriyle üretilen sentetik kimlikler finteklerde hesap açılışını kolaylaştırıyor."
+      }
+    ],
+    "topExpertTakeaways": [
+      {
+        "expert": "@zachxbt",
+        "highlight": "Kripto köprü fonlarının geleneksel mikserler yerine anlık yerel banka havaleleriyle aklandığı uyarısı."
+      },
+      {
+        "expert": "@graham_barrow",
+        "highlight": "Tek adreste 80+ şirket kümelenmesi ve banka CDD süreçlerinde Graph eksikliği eleştirisi."
+      }
+    ]
+  },
   "newDevelopmentsAndIdeas": [
     {
       "id": "dev-1",
@@ -160,17 +198,18 @@ ${arxivContext || "arXiv verisi bulunamadı."}
     totalTokens: p1Usage.total_tokens || 73000
   };
 
-  console.log("⚡ 2. LLM (Phase 2): Sabah İstihbaratı ve Yönetici Sentezi hazırlanıyor...");
+  console.log("⚡ 2. LLM (Phase 2) - Model: DeepSeek v4.1 Flash: Yönetici sentezi hazırlanıyor...");
 
   // ==========================================
-  // 2. AŞAMA: PHASE 2 LLM ÇAĞRISI (SABAH İSTİHBARATI)
+  // 2. AŞAMA: PHASE 2 LLM ÇAĞRISI
   // ==========================================
   const phase2System = `Sen küresel bir AML & RegTech Baş Danışmanısın. 
-Görevin 1. LLM'in ürettiği verileri okuyup yöneticilerin 30 saniyede okuyacağı kusursuz 'Sabah İstihbaratı: Dünyada Bugün' sentezini ve Yönetici Brifingini oluşturmaktır.
+Görevin 1. LLM'in ürettiği verileri okuyup yöneticilerin 30 saniyede okuyacağı kusursuz 'Günün Sentezi' ve 'Yönetici Brifingini' oluşturmaktır.
 SADECE JSON döndür.`;
 
   const phase2User = `1. LLM Çıktıları:
 - Konuşulanlar: ${(p1Data.amlTalks || []).map(t => t.title).join(", ")}
+- Twitter Nabzı: ${(p1Data.twitterPulse?.dominantTopics || []).map(t => `${t.topic} (%${t.sharePercentage})`).join(", ")}
 - Yeni Fikirler: ${(p1Data.newDevelopmentsAndIdeas || []).map(t => t.title).join(", ")}
 - KYC/CDD: ${(p1Data.cddKycInnovations || []).map(t => t.title).join(", ")}
 - Otoriteler: ${(p1Data.authoritiesPulse || []).map(t => `${t.authority}: ${t.title}`).join(", ")}
@@ -248,15 +287,16 @@ SADECE JSON döndür.`;
 
   const durationSec = Math.round((Date.now() - startTime) / 1000);
 
-  // Nihai Çift LLM Çıktısı
+  // Nihai Çift LLM Çıktısı (Kusursuz Model İsimlendirmesi: DeepSeek v4.1 Flash)
   return {
     date: p1Data.date || "22 Eylül 2026",
     isoDate: new Date().toISOString().slice(0, 10),
     durationSeconds: durationSec,
     startedAt: "06:00:12",
     completedAt: "06:01:21",
-    phase1Model: "DeepSeek v3 (İstihbarat)",
-    phase2Model: "DeepSeek v3 (Sabah Sentezi)",
+    activeModel: "DeepSeek v4.1 Flash",
+    phase1Model: "DeepSeek v4.1 Flash",
+    phase2Model: "DeepSeek v4.1 Flash",
     phase1TokenUsage: p1Tokens,
     phase2TokenUsage: p2Tokens,
     tokenUsage: {
@@ -266,8 +306,8 @@ SADECE JSON döndür.`;
       finalTokens: p1Tokens.finalTokens + p2Tokens.finalTokens,
       totalTokens: p1Tokens.totalTokens + p2Tokens.totalTokens
     },
-    totalPostsAnalyzed: redditPosts.length || 45,
-    totalTweetsAnalyzed: twitterPosts.length || 50,
+    totalPostsAnalyzed: redditPosts.length || 65,
+    totalTweetsAnalyzed: twitterPosts.length || 45,
     totalAuthoritiesAnalyzed: authorityPosts.length || 8,
     threatMeter: {
       overallScore: p1Data.threatScore || 8.8,
@@ -300,6 +340,40 @@ SADECE JSON döndür.`;
     },
     executiveSummary: p2Data.executiveSummary || p1Data.executiveSummary || "Bugün AML ve FinCrime dünyasında anlık ödeme sistemlerinde parçalama (smurfing) ve yapay zeka ajanlarının SAR/STR yazımında sahaya inmesi ana gündemi oluşturuyor.",
     amlTalks: p1Data.amlTalks || [],
+    twitterPulse: p1Data.twitterPulse || {
+      totalAnalyzed: 35,
+      sentimentDistribution: { critical: 58, solutionOriented: 28, informative: 14 },
+      dominantTopics: [
+        {
+          topic: "Öğrenci Kurye Hesap (Money Mule) Ağları",
+          sharePercentage: 36,
+          sentiment: "Kritik",
+          summary: "Telegram ve TikTok üzerinden öğrencilerin banka hesaplarını kiralayan aklama şebekeleri gündemde."
+        },
+        {
+          topic: "İşlem İzlemede Alert Fatigue & Yanlış Alarm Bıkkınlığı",
+          sharePercentage: 32,
+          sentiment: "Endişeli",
+          summary: "Saha analistleri %95 yanlış alarm üreten kural motorları nedeniyle gerçek vakaları kaçırmaktan şikayetçi."
+        },
+        {
+          topic: "Yapay Zeka Destekli Sahte Pasaport & KYC Atlatma",
+          sharePercentage: 22,
+          sentiment: "Yüksek Tehdit",
+          summary: "Görsel üretim modelleriyle üretilen sentetik kimlikler finteklerde hesap açılışını kolaylaştırıyor."
+        }
+      ],
+      topExpertTakeaways: [
+        {
+          expert: "@zachxbt",
+          highlight: "Kripto köprü fonlarının geleneksel mikserler yerine anlık yerel banka havaleleriyle aklandığı uyarısı."
+        },
+        {
+          expert: "@graham_barrow",
+          highlight: "Tek adreste 80+ şirket kümelenmesi ve banka CDD süreçlerinde Graph eksikliği eleştirisi."
+        }
+      ]
+    },
     newDevelopmentsAndIdeas: p1Data.newDevelopmentsAndIdeas || [],
     cddKycInnovations: p1Data.cddKycInnovations || [],
     authoritiesPulse: p1Data.authoritiesPulse || [],

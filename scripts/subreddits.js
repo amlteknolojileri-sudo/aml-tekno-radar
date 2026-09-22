@@ -1,40 +1,89 @@
 /**
- * AML & FinCrime Odaklı Reddit Topluluk Havuzu
- * Reddit'in resmi multi-subreddit (r/sub1+sub2) özelliği sayesinde
- * tek bir istekte 6-8 topluluk aynı anda taranır. Sıfır ban riski ve limitsizdir.
+ * AML, Finansal Suçlar & RegTech Odaklı Reddit Topluluk & Arama Havuzu
+ * Yalnızca AML, FinCrime, Yaptırımlar, KYC/CDD ve Dolandırıcılık odaklı topluluklar taranır.
+ * İlgisiz genel teknoloji veya kripto gürültüsü kesinlikle elenir.
  */
 
-export const REDDIT_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 AMLTechRadar/1.0";
+export const REDDIT_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 AMLTechRadar/2.0";
 
+// 1. Doğrudan AML ve FinCrime Topluluk Kümeleri
 export const SUBREDDIT_BATCHES = [
   {
-    name: "AML, Uyum & Kara Para ile Mücadele",
-    slug: "AMLCompliance+anti_money_laundering+compliance+FinCrime",
-    description: "İşlem izleme, SAR/STR bildirimleri, KYC/CDD süreçleri ve regülasyon denetimleri.",
-    icon: "ShieldAlert"
+    name: "Doğrudan AML & Uyum Analistleri Topluluğu",
+    slug: "AMLCompliance+anti_money_laundering+FinCrime+compliance",
+    description: "İşlem izleme kuralları, SAR/STR bildirimleri, false-positive yorgunluğu ve regülasyon denetimleri.",
+    icon: "ShieldAlert",
+    strictFilter: false // Zaten %100 AML topluluğu
   },
   {
-    name: "FinTech, Dolandırıcılık (Fraud) & Ödeme Sistemleri",
-    slug: "fraud+FinTech+banking+PaymentProcessing",
-    description: "Sentetik kimlikler, chargeback, kart dolandırıcılığı ve fintech açıkları.",
-    icon: "CreditCard"
+    name: "Finansal Dolandırıcılık, Sentetik Kimlik & RegTech",
+    slug: "fraud+identitytheft+regtech+FinancialCareers",
+    description: "Sentetik kimlik tespiti, deepfake liveness bypass, kimlik hırsızlığı ve RegTech çözümleri.",
+    icon: "CreditCard",
+    strictFilter: true // Bankacılık/kariyer içinden sadece AML konuları filtrelenir
   },
   {
-    name: "Açık Kaynak İstihbarat (OSINT) & Varlık Takibi",
-    slug: "OSINT+investigation+cybersecurity+forensics",
-    description: "Paravan şirket haritalama, off-shore hesap tespiti ve dijital ayak izi analizi.",
-    icon: "Search"
+    name: "Bankacılık Operasyonları, Şüpheli İşlemler & Mevzuat",
+    slug: "Banking+BankingCompliance",
+    description: "Banka şubeleri ve genel müdürlük işlem izleme, bloke hesaplar, CTR/SAR ve BSA uygulamaları.",
+    icon: "Building",
+    strictFilter: true
   },
   {
-    name: "Kripto Varlık AML, Mixer & On-Chain Güvenlik",
-    slug: "CryptoCurrency+Crypto_General+defi+CryptoScams",
-    description: "Mixer istismarları, köprü hack'leri, borsa dondurma kararları ve on-chain takip.",
-    icon: "Coins"
+    name: "Açık Kaynak İstihbarat (OSINT) & Varlık/Paravan Takibi",
+    slug: "OSINT+forensics+investigation",
+    description: "Paravan şirket haritalama, off-shore hesap tespiti, UBO doğrulaması ve uluslararası varlık takibi.",
+    icon: "Search",
+    strictFilter: true
   },
   {
-    name: "Yapay Zeka, Grafik Analitiği & Anomali Tespiti",
-    slug: "MachineLearning+datascience+artificial+AI_Agents",
-    description: "Finansal ağ analizi (GNN), grafik veritabanları ve anomali tespit modelleri.",
-    icon: "Cpu"
+    name: "Kripto Kara Para Aklama, Mixer & Kurye Dolandırıcılığı",
+    slug: "CryptoScams+Scams",
+    description: "Para katırı (money mule) ağları, kripto mikserleri, DeFi köprü aklamaları ve zincir üstü tuzaklar.",
+    icon: "Coins",
+    strictFilter: true
   }
 ];
+
+// 2. Canlı Reddit Global Arama Beslemeleri (Son 24 saatte doğrudan AML tartışılan her gönderi)
+export const REDDIT_SEARCH_QUERIES = [
+  {
+    name: "Küresel AML & Finansal Suç Tartışmaları",
+    query: 'title:(AML OR "anti-money laundering" OR "money laundering" OR "FinCEN" OR "MASAK" OR "OFAC" OR "SAR narrative" OR "smurfing" OR "money mule")',
+    limit: 50
+  },
+  {
+    name: "İşlem İzleme & Müşteri İnceleme (CDD/KYC) Zorlukları",
+    query: 'title:("transaction monitoring" OR "KYC remediation" OR "beneficial ownership" OR "alert fatigue" OR "false positive" OR "PEP screening")',
+    limit: 50
+  }
+];
+
+// 3. Kesin AML Uygunluk Anahtar Kelimeleri (Gereksiz gönderileri %100 ayıklar)
+export const AML_KEYWORDS = [
+  "aml", "anti-money laundering", "money laundering", "kara para", "aklama",
+  "fincen", "fatf", "masak", "ofac", "sanctions", "yaptırım", "yaptırımlar",
+  "cdd", "edd", "kyc", "ubo", "beneficial owner", "gerçek faydalanıcı",
+  "sar", "str", "ctr", "bsa", "şüpheli işlem", "suspicious activity",
+  "smurfing", "structuring", "money mule", "kurye hesap", "para katırı",
+  "layering", "placement", "integration", "pep", "politically exposed",
+  "transaction monitoring", "işlem izleme", "anomali", "alert fatigue",
+  "false positive", "yanlış alarm", "synthetic identity", "sentetik kimlik",
+  "deepfake liveness", "trade-based money laundering", "tbml",
+  "crypto mixer", "tornado cash", "de-risking", "regtech", "wire fraud",
+  "shell company", "paravan şirket", "source of funds", "source of wealth",
+  "travel rule", "unhosted wallet", "sanction evasion", "asset tracing"
+];
+
+/**
+ * Gönderinin AML ile doğrudan ilişkili olup olmadığını denetler
+ */
+export function isAmlRelevant(title = "", content = "", isStrict = true) {
+  if (!isStrict) return true;
+  const haystack = `${title} ${content}`.toLowerCase();
+  return AML_KEYWORDS.some(kw => {
+    // Kelime sınırı ile arama (örn: 'aml' tek başına veya noktalama ile eşleşsin)
+    const regex = new RegExp(`\\b${kw}\\b`, 'i');
+    return regex.test(haystack);
+  });
+}
