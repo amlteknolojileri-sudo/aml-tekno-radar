@@ -1,6 +1,6 @@
 {
-  "date": "19 Ekim 2026",
-  "isoDate": "2026-10-19",
+  "date": "20 Ekim 2026",
+  "isoDate": "2026-10-20",
   "startedAt": "06:00:12",
   "completedAt": "06:01:21",
   "durationSeconds": 34,
@@ -286,55 +286,55 @@
       "id": "g-1",
       "term": "Money Mule (Para Katırı / Kurye Hesap)",
       "definition": "Dolandırıcılık veya uyuşturucu gelirlerini bankacılık sistemi içinde transfer etmek veya nakde çevirmek amacıyla komisyon karşılığı bilerek ya da kandırılarak kullanılan şahıs hesapları.",
-      "dateStr": "19 Ekim 2026"
+      "dateStr": "20 Ekim 2026"
     },
     {
       "id": "g-2",
       "term": "Smurfing (Parçalama / Yapılandırma)",
       "definition": "Resmi bildirim eşiklerinden (örn: 10.000$ veya 100.000 TL) kaçınmak amacıyla büyük tutarlı bir paranın çok sayıda küçük meblağa bölünerek farklı günlerde veya farklı kişilerin hesaplarından transfer edilmesi taktiği.",
-      "dateStr": "19 Ekim 2026"
+      "dateStr": "20 Ekim 2026"
     },
     {
       "id": "g-3",
       "term": "Layering (Aklama / Katmanlama)",
       "definition": "Yasa dışı fonların kaynağını belirsizleştirmek için karmaşık finansal işlemler, döviz takasları, paravan şirketler veya kripto mikserler üzerinden çok sayıda hesaba art arda aktarılması aşaması.",
-      "dateStr": "19 Ekim 2026"
+      "dateStr": "20 Ekim 2026"
     },
     {
       "id": "g-4",
       "term": "UBO (Ultimate Beneficial Owner / Gerçek Faydalanıcı)",
       "definition": "Bir tüzel kişiliği, şirketi veya vakfı nihai olarak kontrol eden, sermayesinin en az %25'ine doğrudan veya dolaylı sahip olan gerçek kişi.",
-      "dateStr": "19 Ekim 2026"
+      "dateStr": "20 Ekim 2026"
     },
     {
       "id": "g-5",
       "term": "Synthetic Identity Fraud (Sentetik Kimlik Dolandırıcılığı)",
       "definition": "Gerçek bir şahsa ait TC Kimlik / SSN numarası ile sahte isim, adres ve yapay zeka üretimi fotoğrafların birleştirilerek var olmayan yeni bir hayali kimlik profiliyle finans kuruluşlarında hesap açılması.",
-      "dateStr": "19 Ekim 2026"
+      "dateStr": "20 Ekim 2026"
     },
     {
       "id": "g-6",
       "term": "Travel Rule (FATF Öneri 16)",
       "definition": "Belirli bir tutarın üzerindeki kripto veya fiat fon transferlerinde, gönderici ve alıcının kimlik, adres ve hesap bilgilerinin finansal kuruluşlar arasında eşzamanlı ve zorunlu olarak iletilmesini emreden küresel kural.",
-      "dateStr": "19 Ekim 2026"
+      "dateStr": "20 Ekim 2026"
     },
     {
       "id": "g-7",
       "term": "PEP (Politically Exposed Person / Siyasi Nüfuz Sahibi Kişi)",
       "definition": "Devlet başkanı, bakan, milletvekili veya yüksek yargıç gibi önemli kamu görevlerini yürüten ve bu konumları nedeniyle rüşvet ve kara para aklama riskine daha açık olan şahıslar ile onların birinci derece yakınları.",
-      "dateStr": "19 Ekim 2026"
+      "dateStr": "20 Ekim 2026"
     },
     {
       "id": "g-8",
       "term": "SAR / STR (Suspicious Activity / Transaction Report - Şüpheli İşlem Bildirimi)",
       "definition": "Finansal kuruluşların, işlem izleme kuralları veya analist incelemesi sonucunda kara para aklama veya terörizmin finansmanı şüphesi taşıyan işlemleri yasal olarak resmi otoriteye (örn: MASAK, FinCEN) bildirdiği resmi evrak.",
-      "dateStr": "19 Ekim 2026"
+      "dateStr": "20 Ekim 2026"
     },
     {
       "id": "g-9",
       "term": "De-risking (Riskten Kaçınma / Toptan Hesap Kapatma)",
       "definition": "Finans kuruluşlarının, yüksek riskli gördükleri müşteri gruplarını (örn: kripto borsaları, sivil toplum örgütleri veya belirli ülke vatandaşları) vaka bazında incelemek yerine toptan bankacılık sisteminden çıkarma eğilimi.",
-      "dateStr": "19 Ekim 2026"
+      "dateStr": "20 Ekim 2026"
     }
   ]
 }
